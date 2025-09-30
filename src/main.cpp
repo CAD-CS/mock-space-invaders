@@ -1,37 +1,46 @@
-#include <cstdint>
+#include "SFML/Window/Event.hpp"
+#include "SFML/Window/Keyboard.hpp"
 #include <iostream>
-#include <vector>
 #include <string>
 #include <SFML/Graphics.hpp>
+#include "EntityManager.hpp"
+
+const int WINDOW_WIDTH = 700;
+const int WINDOW_HEIGHT = 800;
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(640, 480), "SFML Window");
+    sf::RenderWindow window(sf::VideoMode(WINDOW_HEIGHT, WINDOW_HEIGHT), "Mock invaders");
 
-    sf::Texture texture;
-    texture.loadFromFile("./ball.jpg");
+    sf::Texture playerTexture;
+    playerTexture.loadFromFile("./assets/player.jpg");
 
-    sf::Sprite sprite(texture);
+    sf::Sprite playerSprite;
+    playerSprite.setTexture(playerTexture);
 
-    sf::Font font;
-    font.loadFromFile("./BOOKOS.TTF");
-
-    sf::Text text;
-    text.setFont(font);
-    text.setString("Hello!");
-    text.setFillColor(sf::Color::Blue);
+    auto [xPos, yPos, width, height] = playerSprite.getLocalBounds();
+    
+    playerSprite.setPosition({ 0.5f * (WINDOW_WIDTH - width) , WINDOW_HEIGHT - height});
 
     while (window.isOpen())
     {
         sf::Event event;
         while (window.pollEvent(event))
         {
-            if (event.type == sf::Event::Closed)
-                window.close();
+            switch (event.type)
+            {
+                case sf::Event::Closed:
+                    window.close();
+                    break;
+                case sf::Event::KeyPressed:
+                    if (event.key.code == sf::Keyboard::Left)
+                    {
+                        std::cout << "Pressed!" << std::endl;
+                    }
+            }
         }
-        window.clear(sf::Color::White);
-        window.draw(sprite);
-        window.draw(text);
+        window.clear(sf::Color::Black);
+        window.draw(playerSprite);
         window.display();
     }
     return 0;
