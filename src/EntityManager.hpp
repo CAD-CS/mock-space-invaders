@@ -1,30 +1,30 @@
 #pragma once
 
 #include <cstdint>
-#include <unordered_map>
+#include <vector>
+#include <string>
+#include "Components.hpp"
 
-using entity_t = std::size_t;
 constexpr entity_t MAX_ENTITIES = 5;
-
-struct position_component
-{
-  int x;
-  int y;
-};
-
-struct registry
-{
-  std::unordered_map<entity_t, position_component> positions;
-};
 
 class EntityManager
 {
 
 private:
   entity_t m_entities;
-
-public:
-  EntityManager() : m_entities(0) {}
+  registry m_registry;
+  std::vector<sf::Texture> m_textures;
 
   entity_t createEntity();
+  void initSprite(entity_t, std::string);
+  void initPosition(entity_t, float, float);
+  void initVelocity(entity_t);
+
+public:
+  EntityManager();
+  ~EntityManager();
+
+  void init(int, int);
+  registry& getRegistry();
+  entity_t getEntities();
 };
