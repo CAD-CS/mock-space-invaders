@@ -1,5 +1,5 @@
 #include "Components.hpp"
-#include "SFML/Window.hpp"
+#include <SFML/Window.hpp>
 
 class MovementSystem
 {

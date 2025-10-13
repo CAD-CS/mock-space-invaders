@@ -1,5 +1,5 @@
 #include "MovementSystem.hpp"
-#include "SFML/Window/Keyboard.hpp"
+#include <SFML/Window.hpp>
 #include <iostream>
 
 void MovementSystem::apply(sf::Event event, registry& reg)
