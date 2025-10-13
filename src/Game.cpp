@@ -1,4 +1,6 @@
 #include "Game.hpp"
+#include "PhysicsSystem.hpp"
+#include "MovementSystem.hpp"
 
 Game::Game(int windowWidth, int windowHeight, const std::string& title)
   : m_window(sf::VideoMode(windowWidth, windowHeight), title), m_entityManager()
@@ -19,7 +21,9 @@ void Game::process()
 
 void Game::update()
 {
-  // Run systems here
+  PhysicsSystem::apply(m_entityManager.getRegistry());
+  MovementSystem::apply(m_event, m_entityManager.getRegistry());
+  
 }
 
 void Game::render()

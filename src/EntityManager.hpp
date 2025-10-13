@@ -27,4 +27,5 @@ public:
   void init(int, int);
   registry& getRegistry();
   entity_t getEntities();
+  sf::Sprite& getSprite(entity_t entity);
 };

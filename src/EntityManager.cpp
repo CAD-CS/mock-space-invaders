@@ -2,7 +2,9 @@
 #include <cassert>
 #include <iostream>
 
-EntityManager::EntityManager() : m_entities(0) {}
+EntityManager::EntityManager() : m_entities(0) {
+  m_textures.reserve(MAX_ENTITIES);
+}
 
 EntityManager::~EntityManager() {
     m_textures.clear();
@@ -28,9 +30,28 @@ void EntityManager::init(int windowWidth, int windowHeight)
   initSprite(enemy, "./assets/enemy.jpg");
   initSprite(block, "./assets/block.jpg");
 
-  initPosition(player, 150.0f, 300.0f);
-  initPosition(enemy, 150.0f, 50.0f);
-  initPosition(block, 100.0f, 200.0f);
+
+  {
+    sf::Sprite& sprite = m_registry.sprites[player].sprite;
+    float x = (windowWidth - sprite.getLocalBounds().width) / 2.f;
+    float y = windowHeight - sprite.getLocalBounds().height;
+    initPosition(player, x, y);
+  }
+
+  {
+    sf::Sprite& sprite = m_registry.sprites[enemy].sprite;
+    float x = (windowWidth - sprite.getLocalBounds().width) / 2.f;
+    float y = 0.f;
+    initPosition(enemy, x, y);
+  }
+
+  {
+    sf::Sprite& sprite = m_registry.sprites[block].sprite;
+    float x = (windowWidth - sprite.getLocalBounds().width) / 2.f;
+    float y = (windowHeight - sprite.getLocalBounds().height) / 2.f;
+    initPosition(block, x, y);
+
+  }
 
   initVelocity(player);
   initVelocity(enemy);
@@ -44,14 +65,14 @@ void EntityManager::initSprite(entity_t entity, std::string texturePath)
 
   if (!texture.loadFromFile(texturePath))
   {
-    std::cerr << "Failed to load texture from " << texturePath << std::endl;
+    std::cout << "Failed to load texture from " << texturePath << std::endl;
     return;
   }
 
-  sf::Sprite sprite;
-  sprite.setTexture(texture);
+  m_textures.push_back(std::move(texture));
 
-  m_textures.push_back(texture);
+  sf::Sprite sprite;
+  sprite.setTexture(m_textures.back());
 
   m_registry.sprites[entity] = {sprite};
 }
@@ -59,9 +80,19 @@ void EntityManager::initSprite(entity_t entity, std::string texturePath)
 void EntityManager::initPosition(entity_t entity, float x, float y)
 {
   m_registry.positions[entity] = {x, y};
+  auto it = m_registry.sprites.find(entity);
+  if(it != m_registry.sprites.end())
+  {
+    it->second.sprite.setPosition(x, y);
+  }
 }
 
 void EntityManager::initVelocity(entity_t entity)
 {
-  m_registry.velocities[entity] = {0.0f, 0.0f};
+  m_registry.velocities[entity] = {.0f, 0.0f};
+}
+
+sf::Sprite& EntityManager::getSprite(entity_t entity)
+{
+  return m_registry.sprites[entity].sprite;
 }
