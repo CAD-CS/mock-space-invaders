@@ -1,17 +1,22 @@
-#include "MovementSystem.hpp"
 #include <SFML/Window.hpp>
 #include <iostream>
+#include "MovementSystem.hpp"
+#include "EntityManager.hpp"
 
-void MovementSystem::apply(sf::Event event, registry& reg)
+void MovementSystem::apply(registry& reg) 
 {
-  switch (event.key.code)
+  const float MOVEMENT_SPEED = 0.1f;
+  sf::Sprite& playerSprite = reg.sprites[1].sprite;
+
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) 
   {
-    case sf::Keyboard::Left:
-      std::cout << "LEFT" << std::endl;
-      break;
-    case sf::Keyboard::Right:
-      std::cout << "Right" << std::endl;
-    default:
-      std::cout << "Invalid" << std::endl;
+    std::cout << "Left key pressed\n";
+    EntityManager::displayEntity(1, reg); // Assuming entity 1 is the player
+    playerSprite.move({-MOVEMENT_SPEED, 0.f});
+  }
+
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) 
+  {
+    playerSprite.move({MOVEMENT_SPEED, 0.f});
   }
 }

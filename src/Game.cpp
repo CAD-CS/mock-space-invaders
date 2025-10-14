@@ -22,8 +22,7 @@ void Game::process()
 void Game::update()
 {
   PhysicsSystem::apply(m_entityManager.getRegistry());
-  MovementSystem::apply(m_event, m_entityManager.getRegistry());
-  
+  MovementSystem::apply(m_entityManager.getRegistry());
 }
 
 void Game::render()

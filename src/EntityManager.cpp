@@ -23,6 +23,8 @@ entity_t EntityManager::getEntities() { return m_entities; }
 void EntityManager::init(int windowWidth, int windowHeight)
 {
   entity_t player = createEntity();
+  m_player = player;
+  
   entity_t enemy = createEntity();
   entity_t block = createEntity();
 
@@ -96,3 +98,22 @@ sf::Sprite& EntityManager::getSprite(entity_t entity)
 {
   return m_registry.sprites[entity].sprite;
 }
+
+void EntityManager::displayEntity(entity_t entity, registry registry)
+{
+  std::cout << "Displaying entity: " << entity << std::endl;
+
+  if (registry.positions.contains(entity))
+  {
+    auto& pos = registry.positions[entity];
+    std::cout << "Position - x: " << pos.x << ", y: " << pos.y << std::endl;
+  }
+
+  if (registry.velocities.contains(entity))
+  {
+    auto& vel = registry.velocities[entity];
+    std::cout << "Velocity - xVel: " << vel.xVel << ", yVel: " << vel.yVel << std::endl;
+  }
+}
+
+entity_t EntityManager::getPlayer() { return m_player; }

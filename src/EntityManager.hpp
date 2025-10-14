@@ -12,6 +12,7 @@ class EntityManager
 
 private:
   entity_t m_entities;
+  entity_t m_player;
   registry m_registry;
   std::vector<sf::Texture> m_textures;
 
@@ -27,5 +28,8 @@ public:
   void init(int, int);
   registry& getRegistry();
   entity_t getEntities();
+  entity_t getPlayer();
   sf::Sprite& getSprite(entity_t entity);
+
+  void static displayEntity(entity_t entity, registry registry);
 };

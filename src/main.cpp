@@ -1,10 +1,7 @@
-#include <iostream>
 #include <string>
-
-#include "EntityManager.hpp"
 #include "Game.hpp"
 
-const int WINDOW_WIDTH = 900;
+const int WINDOW_WIDTH = 1200;
 const int WINDOW_HEIGHT = 900;
 
 int main()
