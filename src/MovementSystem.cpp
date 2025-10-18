@@ -3,20 +3,31 @@
 #include "MovementSystem.hpp"
 #include "EntityManager.hpp"
 
-void MovementSystem::apply(registry& reg) 
+sf::Event createKeyEvent(sf::Keyboard::Key keycode) 
 {
-  const float MOVEMENT_SPEED = 0.1f;
-  sf::Sprite& playerSprite = reg.sprites[1].sprite;
+  sf::Event event;
+  event.type = sf::Event::KeyPressed;
+  event.key.code = keycode;
+  event.key.alt = false;
+  event.key.control = false;
+  event.key.shift = false;
+  event.key.system = false;
+  return event;
+}
 
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) 
-  {
-    std::cout << "Left key pressed\n";
-    EntityManager::displayEntity(1, reg); // Assuming entity 1 is the player
-    playerSprite.move({-MOVEMENT_SPEED, 0.f});
-  }
-
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) 
-  {
-    playerSprite.move({MOVEMENT_SPEED, 0.f});
-  }
+void MovementSystem::apply(registry& reg, sf::Event event) 
+{
+    const float MOVEMENT_SPEED = 5.0f;
+    sf::Sprite& playerSprite = reg.sprites[1].sprite;
+    
+    if (event.key.code == sf::Keyboard::Left) {
+        playerSprite.move(-MOVEMENT_SPEED, 0.f);
+    }
+    else if (event.key.code == sf::Keyboard::Right) {
+        playerSprite.move(MOVEMENT_SPEED, 0.f);
+    }
+    
+    // Update the position component to match sprite position
+    auto pos = playerSprite.getPosition();
+    reg.positions[1] = {pos.x, pos.y};
 }

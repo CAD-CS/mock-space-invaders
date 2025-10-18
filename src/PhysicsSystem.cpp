@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <cstdio>
 #include "PhysicsSystem.hpp"
 #include "EntityManager.hpp"
 

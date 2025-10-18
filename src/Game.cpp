@@ -10,19 +10,27 @@ Game::Game(int windowWidth, int windowHeight, const std::string& title)
 
 void Game::process()
 {
-  while (m_window.pollEvent(m_event))
-  {
-    if (m_event.type == sf::Event::Closed)
+    // Update game state regardless of events
+    update();
+    
+    // Handle window events
+    while (m_window.pollEvent(m_event))
     {
-      m_window.close();
+        if (m_event.type == sf::Event::Closed)
+        {
+            m_window.close();
+        }
+        // Handle keyboard input events
+        if (m_event.type == sf::Event::KeyPressed)
+        {
+            MovementSystem::apply(m_entityManager.getRegistry(), m_event);
+        }
     }
-  }
 }
 
 void Game::update()
 {
-  PhysicsSystem::apply(m_entityManager.getRegistry());
-  MovementSystem::apply(m_entityManager.getRegistry());
+    PhysicsSystem::apply(m_entityManager.getRegistry());
 }
 
 void Game::render()
@@ -41,10 +49,11 @@ void Game::render()
 
 void Game::run()
 {
+  m_window.setKeyRepeatEnabled(true);
+
   while (m_window.isOpen())
   {
     process();
-    update();
     render();
   }
 }

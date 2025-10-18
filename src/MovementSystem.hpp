@@ -4,5 +4,5 @@
 class MovementSystem
 {
 public:
-  void static apply(registry&);  
+  void static apply(registry&, sf::Event event);  
 };
