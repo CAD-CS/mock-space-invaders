@@ -1,7 +1,0 @@
-{
-  "files.associations": {
-    "*.pl": "prolog",
-    "unordered_map": "cpp",
-    "iostream": "cpp"
-  }
-}
