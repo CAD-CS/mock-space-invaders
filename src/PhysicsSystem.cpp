@@ -5,14 +5,13 @@
 
 void PhysicsSystem::apply(registry& reg)
 {
-  for(auto& [entity, posComp] : reg.positions)
+
+  for(auto& [entity, sprite] : reg.sprites)
   {
     if(reg.velocities.contains(entity))
     {
-      auto& velComp = reg.velocities[entity];
-      posComp.x += velComp.xVel;
-      posComp.y += velComp.yVel;
-      reg.sprites[entity].sprite.setPosition(posComp.x, posComp.y);
+      auto& velComp = reg.velocities.at(entity);
+      sprite.move({velComp.xVel, velComp.yVel});
     }
   }
 }

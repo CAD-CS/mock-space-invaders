@@ -3,6 +3,7 @@
 
 class MovementSystem
 {
+  static constexpr float MOVEMENT_SPEED = 100.f;
 public:
-  void static apply(registry&, sf::Event event);  
+  void static apply(registry&, const sf::Event::KeyPressed* key, sf::Vector2u windowSize);  
 };

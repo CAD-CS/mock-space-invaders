@@ -3,29 +3,25 @@
 #include "MovementSystem.hpp"
 
 Game::Game(int windowWidth, int windowHeight, const std::string& title)
-  : m_window(sf::VideoMode(windowWidth, windowHeight), title), m_entityManager()
+  : m_window(sf::VideoMode({static_cast<unsigned int>(windowWidth), static_cast<unsigned int>(windowHeight)}), title), m_entityManager()
 {
   m_entityManager.init(windowWidth, windowHeight);
 }
 
 void Game::process()
 {
-    // Update game state regardless of events
-    update();
-    
-    // Handle window events
-    while (m_window.pollEvent(m_event))
+  update();
+  
+  while (const auto m_event = m_window.pollEvent())
+  {
+    if (m_event->is<sf::Event::Closed>())
     {
-        if (m_event.type == sf::Event::Closed)
-        {
-            m_window.close();
-        }
-        // Handle keyboard input events
-        if (m_event.type == sf::Event::KeyPressed)
-        {
-            MovementSystem::apply(m_entityManager.getRegistry(), m_event);
-        }
+      m_window.close();
+    } else if (const auto* key = m_event->getIf<sf::Event::KeyPressed>())
+    {
+      MovementSystem::apply(m_entityManager.getRegistry(), key, m_window.getSize());
     }
+  }
 }
 
 void Game::update()
@@ -39,9 +35,9 @@ void Game::render()
 
   auto& sprites = m_entityManager.getRegistry().sprites;
 
-  for (const auto& [entity, spriteComponent] : sprites)
+  for (const auto& [entity, sprite] : sprites)
   {
-    m_window.draw(spriteComponent.sprite);
+    m_window.draw(sprite);
   }
   
   m_window.display();

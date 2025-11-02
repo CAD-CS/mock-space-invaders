@@ -31,5 +31,4 @@ public:
   entity_t getPlayer();
   sf::Sprite& getSprite(entity_t entity);
 
-  void static displayEntity(entity_t entity, registry registry);
 };

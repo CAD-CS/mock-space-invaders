@@ -6,7 +6,6 @@ class Game
 {
 private:
   sf::RenderWindow m_window;
-  sf::Event m_event;
 
   EntityManager m_entityManager;
 

@@ -12,8 +12,8 @@ EntityManager::~EntityManager() {
 
 entity_t EntityManager::createEntity()
 {
-    assert(m_entities < MAX_ENTITIES && "Too many entities in existence.");
-    return ++m_entities;
+  assert(m_entities < MAX_ENTITIES && "Too many entities in existence.");
+  return ++m_entities;
 }
 
 registry& EntityManager::getRegistry() { return m_registry;}
@@ -34,23 +34,23 @@ void EntityManager::init(int windowWidth, int windowHeight)
 
 
   {
-    sf::Sprite& sprite = m_registry.sprites[player].sprite;
-    float x = (windowWidth - sprite.getLocalBounds().width) / 2.f;
-    float y = windowHeight - sprite.getLocalBounds().height;
+    sf::Sprite& sprite = m_registry.sprites.at(player);
+    float x = (windowWidth - sprite.getLocalBounds().size.x) / 2.f;
+    float y = windowHeight - sprite.getLocalBounds().size.y;
     initPosition(player, x, y);
   }
 
   {
-    sf::Sprite& sprite = m_registry.sprites[enemy].sprite;
-    float x = (windowWidth - sprite.getLocalBounds().width) / 2.f;
+    sf::Sprite& sprite = m_registry.sprites.at(enemy);
+    float x = (windowWidth - sprite.getLocalBounds().size.x) / 2.f;
     float y = 0.f;
     initPosition(enemy, x, y);
   }
 
   {
-    sf::Sprite& sprite = m_registry.sprites[block].sprite;
-    float x = (windowWidth - sprite.getLocalBounds().width) / 2.f;
-    float y = (windowHeight - sprite.getLocalBounds().height) / 2.f;
+    sf::Sprite& sprite = m_registry.sprites.at(block);
+    float x = (windowWidth - sprite.getLocalBounds().size.x) / 2.f;
+    float y = (windowHeight - sprite.getLocalBounds().size.y) / 2.f;
     initPosition(block, x, y);
 
   }
@@ -73,47 +73,28 @@ void EntityManager::initSprite(entity_t entity, std::string texturePath)
 
   m_textures.push_back(std::move(texture));
 
-  sf::Sprite sprite;
-  sprite.setTexture(m_textures.back());
+  sf::Sprite sprite(m_textures.back());
 
-  m_registry.sprites[entity] = {sprite};
+  m_registry.sprites.insert({entity, sprite});
 }
 
 void EntityManager::initPosition(entity_t entity, float x, float y)
 {
-  m_registry.positions[entity] = {x, y};
   auto it = m_registry.sprites.find(entity);
   if(it != m_registry.sprites.end())
   {
-    it->second.sprite.setPosition(x, y);
+    it->second.setPosition({x,y});
   }
 }
 
 void EntityManager::initVelocity(entity_t entity)
 {
-  m_registry.velocities[entity] = {.0f, 0.0f};
+  m_registry.velocities.insert({entity, {.0f, 0.0f}});
 }
 
 sf::Sprite& EntityManager::getSprite(entity_t entity)
 {
-  return m_registry.sprites[entity].sprite;
-}
-
-void EntityManager::displayEntity(entity_t entity, registry registry)
-{
-  std::cout << "Displaying entity: " << entity << std::endl;
-
-  if (registry.positions.contains(entity))
-  {
-    auto& pos = registry.positions[entity];
-    std::cout << "Position - x: " << pos.x << ", y: " << pos.y << std::endl;
-  }
-
-  if (registry.velocities.contains(entity))
-  {
-    auto& vel = registry.velocities[entity];
-    std::cout << "Velocity - xVel: " << vel.xVel << ", yVel: " << vel.yVel << std::endl;
-  }
+  return m_registry.sprites.at(entity);
 }
 
 entity_t EntityManager::getPlayer() { return m_player; }
