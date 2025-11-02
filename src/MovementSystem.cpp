@@ -10,17 +10,43 @@ void MovementSystem::apply(registry& reg, const sf::Event::KeyPressed* key, sf::
 
     switch (key->code) {
     case sf::Keyboard::Key::Left:
+        if (!isWithinWindow(playerSprite, windowSize, sf::Keyboard::Key::Left))
+        {
+            playerSprite.setPosition({0.f, playerSprite.getPosition().y});
+            return;
+        }
         playerSprite.move({-MOVEMENT_SPEED, 0.f});
-        break;
+        return;
     case sf::Keyboard::Key::Right:
+        if(!isWithinWindow(playerSprite, windowSize, sf::Keyboard::Key::Right))
+        {
+            playerSprite.setPosition({static_cast<float>(windowSize.x - playerSprite.getTexture().getSize().x), playerSprite.getPosition().y});
+            return;
+        }
         playerSprite.move({MOVEMENT_SPEED, 0.f});
-        break;
+        return;
     default:
+        std::cout << "Unhandled key in MovementSystem\n";
         break;
     }
 }
 
-bool isWithinWindow(const sf::Sprite& sprite, const sf::Vector2u& windowSize)
+bool MovementSystem::isWithinWindow(const sf::Sprite& sprite, const sf::Vector2u& windowSize, sf::Keyboard::Key direction)
 {
+    switch (direction)
+    {
+    case sf::Keyboard::Key::Left:
+        if ((sprite.getPosition().x - MOVEMENT_SPEED) < 0)
+        {
+            return false;
+        }
+        break;
+    case sf::Keyboard::Key::Right:
+        if ((sprite.getPosition().x + sprite.getTexture().getSize().x + MOVEMENT_SPEED)> windowSize.x)
+        {
+            return false;
+        }
+    }
+
     return true;
 }
