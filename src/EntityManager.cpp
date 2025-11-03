@@ -27,10 +27,12 @@ void EntityManager::init(int windowWidth, int windowHeight)
   
   entity_t enemy = createEntity();
   entity_t block = createEntity();
+  entity_t shot = createEntity();
 
   initSprite(player, "./assets/player.jpg");
   initSprite(enemy, "./assets/enemy.jpg");
   initSprite(block, "./assets/block.jpg");
+  initSprite(shot, "assets/shot.jpg");
 
 
   {
@@ -55,9 +57,17 @@ void EntityManager::init(int windowWidth, int windowHeight)
 
   }
 
+  {
+    sf::Sprite& sprite = m_registry.sprites.at(shot);
+    float x = 20.f;
+    float y = 50.f;
+    initPosition(shot, x, y);
+  }
+
   initVelocity(player);
   initVelocity(enemy);
   initVelocity(block);
+  initVelocity(shot);
 
 }
 

@@ -1,6 +1,5 @@
 #include "Game.hpp"
-#include "PhysicsSystem.hpp"
-#include "MovementSystem.hpp"
+#include "System.hpp"
 
 Game::Game(int windowWidth, int windowHeight, const std::string& title)
   : m_window(sf::VideoMode({static_cast<unsigned int>(windowWidth), static_cast<unsigned int>(windowHeight)}), title), m_entityManager()
@@ -19,14 +18,15 @@ void Game::process()
       m_window.close();
     } else if (const auto* key = m_event->getIf<sf::Event::KeyPressed>())
     {
-      MovementSystem::apply(m_entityManager.getRegistry(), key, m_window.getSize());
+        System::MovementSystem::apply(m_entityManager.getRegistry(), key, m_window.getSize());
+      System::FiringSystem::apply(m_entityManager.getRegistry(), key, m_window.getSize(), m_entityManager);
     }
   }
 }
 
 void Game::update()
 {
-    PhysicsSystem::apply(m_entityManager.getRegistry());
+    System::PhysicsSystem::apply(m_entityManager.getRegistry());
 }
 
 void Game::render()

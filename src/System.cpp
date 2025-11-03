@@ -1,10 +1,6 @@
-#include <SFML/Window.hpp>
-#include <iostream>
-#include "MovementSystem.hpp"
-#include "EntityManager.hpp"
+#include "System.hpp"
 
-
-void MovementSystem::apply(registry& reg, const sf::Event::KeyPressed* key, sf::Vector2u windowSize) 
+void System::MovementSystem::apply(registry& reg, const sf::Event::KeyPressed* key, sf::Vector2u windowSize) 
 {
     sf::Sprite& playerSprite = reg.sprites.at(1);
 
@@ -31,7 +27,7 @@ void MovementSystem::apply(registry& reg, const sf::Event::KeyPressed* key, sf::
     }
 }
 
-bool MovementSystem::isWithinWindow(const sf::Sprite& sprite, const sf::Vector2u& windowSize, sf::Keyboard::Key direction)
+bool System::MovementSystem::isWithinWindow(const sf::Sprite& sprite, const sf::Vector2u& windowSize, sf::Keyboard::Key direction)
 {
     switch (direction)
     {
@@ -50,3 +46,29 @@ bool MovementSystem::isWithinWindow(const sf::Sprite& sprite, const sf::Vector2u
 
     return true;
 }
+
+void System::PhysicsSystem::apply(registry& reg)
+{
+
+  for(auto& [entity, sprite] : reg.sprites)
+  {
+    if(reg.velocities.contains(entity))
+    {
+      auto& velComp = reg.velocities.at(entity);
+      sprite.move({velComp.xVel, velComp.yVel});
+    }
+  }
+}
+
+void System::FiringSystem::apply(registry& reg, const sf::Event::KeyPressed* key, sf::Vector2u windowSize, EntityManager& entityManager) 
+{
+    switch (key->code) {
+    case sf::Keyboard::Key::Up:
+        std::cout << "Fire projectile!\n";
+        return;
+    default:
+        std::cout << "Unhandled key in FiringSystem\n";
+        break;
+    }
+}
+
