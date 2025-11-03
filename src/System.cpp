@@ -11,7 +11,7 @@ void System::MovementSystem::apply(registry& reg, const sf::Event::KeyPressed* k
             playerSprite.setPosition({0.f, playerSprite.getPosition().y});
             return;
         }
-        playerSprite.move({-MOVEMENT_SPEED, 0.f});
+        playerSprite.move({-PLAYER_MOVEMENT_SPEED, 0.f});
         return;
     case sf::Keyboard::Key::Right:
         if(!isWithinWindow(playerSprite, windowSize, sf::Keyboard::Key::Right))
@@ -19,7 +19,7 @@ void System::MovementSystem::apply(registry& reg, const sf::Event::KeyPressed* k
             playerSprite.setPosition({static_cast<float>(windowSize.x - playerSprite.getTexture().getSize().x), playerSprite.getPosition().y});
             return;
         }
-        playerSprite.move({MOVEMENT_SPEED, 0.f});
+        playerSprite.move({PLAYER_MOVEMENT_SPEED, 0.f});
         return;
     default:
         std::cout << "Unhandled key in MovementSystem\n";
@@ -32,13 +32,13 @@ bool System::MovementSystem::isWithinWindow(const sf::Sprite& sprite, const sf::
     switch (direction)
     {
     case sf::Keyboard::Key::Left:
-        if ((sprite.getPosition().x - MOVEMENT_SPEED) < 0)
+        if ((sprite.getPosition().x - PLAYER_MOVEMENT_SPEED) < 0)
         {
             return false;
         }
         break;
     case sf::Keyboard::Key::Right:
-        if ((sprite.getPosition().x + sprite.getTexture().getSize().x + MOVEMENT_SPEED)> windowSize.x)
+        if ((sprite.getPosition().x + sprite.getTexture().getSize().x + PLAYER_MOVEMENT_SPEED)> windowSize.x)
         {
             return false;
         }
@@ -49,15 +49,14 @@ bool System::MovementSystem::isWithinWindow(const sf::Sprite& sprite, const sf::
 
 void System::PhysicsSystem::apply(registry& reg)
 {
-
-  for(auto& [entity, sprite] : reg.sprites)
-  {
-    if(reg.velocities.contains(entity))
+    for(auto& [entity, sprite] : reg.sprites)
     {
-      auto& velComp = reg.velocities.at(entity);
-      sprite.move({velComp.xVel, velComp.yVel});
+        if(reg.velocities.contains(entity))
+        {
+            auto& velComp = reg.velocities.at(entity);
+            sprite.move({velComp.xVel, velComp.yVel});
+        }
     }
-  }
 }
 
 void System::FiringSystem::apply(registry& reg, const sf::Event::KeyPressed* key, sf::Vector2u windowSize, EntityManager& entityManager) 
