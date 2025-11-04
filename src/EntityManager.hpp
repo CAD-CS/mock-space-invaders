@@ -5,7 +5,7 @@
 #include <string>
 #include "Components.hpp"
 
-constexpr entity_t MAX_ENTITIES = 5;
+constexpr entity_t MAX_ENTITIES = 100;
 
 class EntityManager
 {
@@ -14,9 +14,10 @@ private:
     entity_t m_entities;
     entity_t m_player;
     registry m_registry;
-    std::vector<sf::Texture> m_textures;
+    std::unordered_map<std::string, sf::Texture> m_textures;
 
-    void createSprite(entity_t entity, std::string texturePath);
+    void createSprite(entity_t entity, std::string texturePath, std::string textureName);
+    void createSprite(entity_t entity, std::string textureName);
 
     void init(int windowWidth, int windowHeight);
 
@@ -27,8 +28,10 @@ public:
     EntityManager(int  windowWidth, int windowHeight);
     ~EntityManager();
 
-    entity_t createEntity(std::string texturePath);
+    entity_t createEntity(std::string texturePath, std::string textureName);
+    entity_t createEntity(std::string textureName);
     registry& getRegistry();
     entity_t getEntities();
     entity_t getPlayer();
+    sf::Sprite& getSprite(entity_t entity);
 };

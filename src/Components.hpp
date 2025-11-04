@@ -11,11 +11,6 @@ struct velocity_component
     float yVel;
 };
 
-struct texture_component
-{
-    sf::Texture texture;
-};
-
 struct registry
 {
     std::unordered_map<entity_t, velocity_component> velocities;
