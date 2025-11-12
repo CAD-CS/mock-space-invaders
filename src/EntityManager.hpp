@@ -15,8 +15,9 @@ private:
     entity_t m_player;
     registry m_registry;
     std::unordered_map<std::string, sf::Texture> m_textures;
+    std::unordered_map<entity_t, sf::Sprite> m_sprites;
 
-    void createSprite(entity_t entity, std::string texturePath, std::string textureName);
+    void loadTexture(const std::string& texturePath, const std::string& textureName);
     void createSprite(entity_t entity, std::string textureName);
 
     void init(int windowWidth, int windowHeight);
@@ -24,14 +25,16 @@ private:
     void initPosition(entity_t entity, float x, float y);
     void initVelocity(entity_t entity);
 
+    entity_t getEntities();
+
 public:
     EntityManager(int  windowWidth, int windowHeight);
     ~EntityManager();
 
-    entity_t createEntity(std::string texturePath, std::string textureName);
     entity_t createEntity(std::string textureName);
+    void destroyEntity(entity_t entity);
     registry& getRegistry();
-    entity_t getEntities();
     entity_t getPlayer();
     sf::Sprite& getSprite(entity_t entity);
+    std::unordered_map<entity_t, sf::Sprite>& getSprites();
 };

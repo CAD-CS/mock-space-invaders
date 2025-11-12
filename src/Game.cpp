@@ -34,20 +34,21 @@ void Game::process()
 
 void Game::passiveUpdates()
 {
-    System::PhysicsSystem::apply(m_entityManager.getRegistry());
+    System::PhysicsSystem::apply(m_entityManager);
+    System::CollisionSystem::apply(m_entityManager);
 }
 
 void Game::activeUpdates(const sf::Event::KeyPressed* key)
 {
-    System::MovementSystem::apply(m_entityManager.getRegistry(), key, m_window.getSize());
-    System::FiringSystem::apply(m_entityManager.getRegistry(), key, m_window.getSize(), m_entityManager);
+    System::MovementSystem::apply(m_entityManager, key, m_window.getSize());
+    System::FiringSystem::apply(m_entityManager, key, m_window.getSize());
 }
 
 void Game::render()
 {  
     m_window.clear(sf::Color::Black);
 
-    auto& sprites = m_entityManager.getRegistry().sprites;
+    auto& sprites = m_entityManager.getSprites();
 
     for (const auto& [entity, sprite] : sprites)
     {

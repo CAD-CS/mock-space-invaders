@@ -13,8 +13,10 @@ struct velocity_component
 
 struct registry
 {
-    std::unordered_map<entity_t, velocity_component> velocities;
-    std::unordered_map<entity_t, sf::Sprite> sprites;
-    std::vector<entity_t> rendereables;
-    std::unordered_map<entity_t, sf::Sprite> projectiles;
+    std::unordered_map<entity_t, velocity_component> velocities_map;
+    std::unordered_map<std::string, entity_t> entityNames_map;
+
+    std::vector<entity_t> projectiles_tag;
+    std::vector<entity_t> enemies_tag;
+    std::vector<entity_t> hittables_tag;
 };

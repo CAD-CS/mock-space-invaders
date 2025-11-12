@@ -1,8 +1,8 @@
 #include "System.hpp"
 
-void System::MovementSystem::apply(registry& reg, const sf::Event::KeyPressed* key, sf::Vector2u windowSize) 
+void System::MovementSystem::apply(EntityManager& entityManager, const sf::Event::KeyPressed* key, sf::Vector2u windowSize) 
 {
-    sf::Sprite& playerSprite = reg.sprites.at(1);
+    sf::Sprite& playerSprite = entityManager.getSprite(entityManager.getPlayer());
 
     switch (key->code) {
     case sf::Keyboard::Key::Left:
@@ -44,44 +44,78 @@ bool System::MovementSystem::isWithinWindow(const sf::Sprite& sprite, const sf::
     return true;
 }
 
-void System::PhysicsSystem::apply(registry& reg)
+void System::PhysicsSystem::apply(EntityManager& entityManager)
 {
-    for(auto& [entity, sprite] : reg.sprites)
+    for(auto& [entity, sprite] : entityManager.getSprites())
     {
-        if(reg.velocities.contains(entity))
+        if(entityManager.getRegistry().velocities_map.contains(entity))
         {
-            auto& velComp = reg.velocities.at(entity);
+            auto& velComp = entityManager.getRegistry().velocities_map.at(entity);
             sprite.move({velComp.xVel, velComp.yVel});
         }
     }
 }
 
-void System::FiringSystem::apply(registry& reg, const sf::Event::KeyPressed* key, sf::Vector2u windowSize, EntityManager& entityManager) 
+void System::FiringSystem::apply(EntityManager& entityManager, const sf::Event::KeyPressed* key, sf::Vector2u windowSize) 
 {
     switch (key->code) 
     {
     case sf::Keyboard::Key::Up:
         entity_t newProjectile = entityManager.createEntity("Projectile");
 
-        sf::Sprite projectileSprite = entityManager.getSprite(newProjectile);
+        sf::Sprite& projectileSprite = entityManager.getSprite(newProjectile);
 
-        float x = entityManager.getSprite(1).getTexture().getSize().x / 2.f + entityManager.getSprite(1).getPosition().x - projectileSprite.getTexture().getSize().x / 2.f;
-        float y = windowSize.y - 115.f;
+        float x = entityManager.getSprite(entityManager.getPlayer()).getGlobalBounds().size.x / 2.f + entityManager.getSprite(entityManager.getPlayer()).getGlobalBounds().position.x - projectileSprite.getGlobalBounds().size.x / 2.f;
 
+        float y =  entityManager.getSprite(entityManager.getPlayer()).getGlobalBounds().position.y - projectileSprite.getGlobalBounds().size.y - 5.f; 
 
-        reg.sprites.insert({newProjectile, projectileSprite});
-        reg.projectiles.insert({newProjectile, projectileSprite});
-        reg.velocities.insert({newProjectile, {0.f, -PROJECTILE_MOVEMENT_SPEED}});
-        reg.sprites.at(newProjectile).setPosition({x, y});
+        std::cout << "Projectile fired at position: (" << x << ", " << y << ")" << std::endl;
+        std::cout << "Projectile addresss: " << &projectileSprite << std::endl;
 
-        std::cout << "Projectile address: " << &projectileSprite << "\n";
-        std::cout << "Projectile Position: (" << projectileSprite.getPosition().x << ", " << projectileSprite.getPosition().y << ")\n";
-        std::cout << "Projectile Texture Address: " << &projectileSprite.getTexture() << "\n";
-        std::cout << "Sprite address: " << &reg.sprites.at(newProjectile) << "\n";
-        std::cout << "Sprite Position: (" << reg.sprites.at(newProjectile).getPosition().x << ", " << reg.sprites.at(newProjectile).getPosition().y << ")\n";
-        std::cout << "Sprite Texture Address: " << &reg.sprites.at(newProjectile).getTexture() << "\n";
+        projectileSprite.setPosition({x, y});
 
+        entityManager.getRegistry().projectiles_tag.push_back(newProjectile);
+        entityManager.getRegistry().velocities_map.insert({newProjectile, {0.f, -PROJECTILE_MOVEMENT_SPEED}});
+
+        std::cout << "Size of projectiles: " << entityManager.getRegistry().projectiles_tag.size() << std::endl;
         return;
     }
+}
+
+void System::CollisionSystem::apply(EntityManager& entityManager)
+{
+    std::vector<entity_t> spritesToRemove;
+
+    for (auto& projectile : entityManager.getRegistry().projectiles_tag)
+    {
+        for (auto& hittable : entityManager.getRegistry().hittables_tag)
+        {
+            if (isColliding(entityManager.getSprite(projectile), entityManager.getSprite(hittable)))
+            {
+                spritesToRemove.push_back(projectile);
+                spritesToRemove.push_back(hittable);
+            }
+        }
+    }
+
+    for (auto& spriteEntity : spritesToRemove)
+    {
+        std::cout << "Removing entity: " << spriteEntity << std::endl;
+        entityManager.destroyEntity(spriteEntity);
+    }
+}
+
+bool System::CollisionSystem::isColliding(const sf::Sprite& spriteA, const sf::Sprite& spriteB)
+{
+    sf::FloatRect boundsA = spriteA.getGlobalBounds();
+    sf::FloatRect boundsB = spriteB.getGlobalBounds();
+
+    bool collisionX = (boundsA.position.x < boundsB.position.x + boundsB.size.x) && (boundsA.position.x + boundsA.size.x > boundsB.position.x);
+
+    bool collisionY = (boundsA.position.y < boundsB.position.y + boundsB.size.y) && (boundsA.position.y + boundsA.size.y > boundsB.position.y);
+
+    //std::cout << (collisionX && collisionY) << std::endl;
+
+    return collisionX && collisionY;
 }
 
