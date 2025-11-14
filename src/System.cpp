@@ -67,17 +67,13 @@ void System::FiringSystem::apply(EntityManager& entityManager, const sf::Event::
 
         float x = entityManager.getSprite(entityManager.getPlayer()).getGlobalBounds().size.x / 2.f + entityManager.getSprite(entityManager.getPlayer()).getGlobalBounds().position.x - projectileSprite.getGlobalBounds().size.x / 2.f;
 
-        float y =  entityManager.getSprite(entityManager.getPlayer()).getGlobalBounds().position.y - projectileSprite.getGlobalBounds().size.y - 5.f; 
-
-        std::cout << "Projectile fired at position: (" << x << ", " << y << ")" << std::endl;
-        std::cout << "Projectile addresss: " << &projectileSprite << std::endl;
+        float y =  entityManager.getSprite(entityManager.getPlayer()).getGlobalBounds().position.y - projectileSprite.getGlobalBounds().size.y - 1.f; 
 
         projectileSprite.setPosition({x, y});
 
         entityManager.getRegistry().projectiles_tag.push_back(newProjectile);
         entityManager.getRegistry().velocities_map.insert({newProjectile, {0.f, -PROJECTILE_MOVEMENT_SPEED}});
 
-        std::cout << "Size of projectiles: " << entityManager.getRegistry().projectiles_tag.size() << std::endl;
         return;
     }
 }
@@ -90,6 +86,10 @@ void System::CollisionSystem::apply(EntityManager& entityManager)
     {
         for (auto& hittable : entityManager.getRegistry().hittables_tag)
         {
+            if (hittable == 4 )
+            {
+                std::cout << "IN COLLISION SYSTEM Getting entity sprite for entity: " << hittable << " Name: " << entityManager.getRegistry().entityNames_map[hittable] << std::endl;
+            }
             if (isColliding(entityManager.getSprite(projectile), entityManager.getSprite(hittable)))
             {
                 spritesToRemove.push_back(projectile);
@@ -100,7 +100,6 @@ void System::CollisionSystem::apply(EntityManager& entityManager)
 
     for (auto& spriteEntity : spritesToRemove)
     {
-        std::cout << "Removing entity: " << spriteEntity << std::endl;
         entityManager.destroyEntity(spriteEntity);
     }
 }
@@ -114,8 +113,51 @@ bool System::CollisionSystem::isColliding(const sf::Sprite& spriteA, const sf::S
 
     bool collisionY = (boundsA.position.y < boundsB.position.y + boundsB.size.y) && (boundsA.position.y + boundsA.size.y > boundsB.position.y);
 
-    //std::cout << (collisionX && collisionY) << std::endl;
-
     return collisionX && collisionY;
 }
 
+
+void System::OutOfBoundsSystem::apply(EntityManager& entityManager, sf::Vector2u windowSize)
+{
+    std::vector<entity_t> spritesToRemove;
+
+    for (auto& projectile : entityManager.getRegistry().projectiles_tag)
+    {
+        if (isOutOfBounds(entityManager.getSprite(projectile), windowSize))
+        {
+            spritesToRemove.push_back(projectile);
+        }
+    }
+
+    for (auto& spriteEntity : spritesToRemove)
+    {
+        entityManager.destroyEntity(spriteEntity);
+    }
+}
+
+bool System::OutOfBoundsSystem::isOutOfBounds(const sf::Sprite& sprite, const sf::Vector2u& windowSize)
+{
+    sf::FloatRect bounds = sprite.getGlobalBounds();
+
+    if (bounds.position.y + bounds.size.y < 0 || bounds.position.y > windowSize.y)
+    {
+        return true;
+    }
+
+    return false;
+} 
+
+void System::EnemyMovementSystem::apply(EntityManager& entityManager)
+{
+    for (auto& enemy : entityManager.getRegistry().enemies_tag)
+    {
+        if (enemy == 4 )
+        {
+            std::cout << "IN ENEMY MOVEMENT SYSTEM Getting entity sprite for entity: " << enemy << " Name: " << entityManager.getRegistry().entityNames_map[enemy] << std::endl;
+        }
+        sf::Sprite& enemySprite = entityManager.getSprite(enemy);
+        enemySprite.move({0.f, ENEMY_MOVEMENT_SPEED});
+    }
+}
+
+// Systems to implement: enemy shooting system, score system, pausing system

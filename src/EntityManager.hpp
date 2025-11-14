@@ -25,7 +25,8 @@ private:
     void initPosition(entity_t entity, float x, float y);
     void initVelocity(entity_t entity);
 
-    entity_t getEntities();
+    void spawnEnemies();
+    void spawnBlocks();
 
 public:
     EntityManager(int  windowWidth, int windowHeight);

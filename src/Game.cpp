@@ -8,6 +8,7 @@ Game::Game(int windowWidth, int windowHeight, const std::string& title)
 void Game::run()
 {
     m_window.setKeyRepeatEnabled(true);
+    m_window.setFramerateLimit(60);
 
     while (m_window.isOpen())
     {
@@ -36,6 +37,8 @@ void Game::passiveUpdates()
 {
     System::PhysicsSystem::apply(m_entityManager);
     System::CollisionSystem::apply(m_entityManager);
+    System::OutOfBoundsSystem::apply(m_entityManager, m_window.getSize());
+    System::EnemyMovementSystem::apply(m_entityManager);
 }
 
 void Game::activeUpdates(const sf::Event::KeyPressed* key)

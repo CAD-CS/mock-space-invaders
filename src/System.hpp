@@ -38,4 +38,21 @@ namespace System
         static void apply(EntityManager& entityManager);
     };
 
+    class OutOfBoundsSystem
+    {
+    private:
+        static bool isOutOfBounds(const sf::Sprite& sprite, const sf::Vector2u& windowSize);
+    public:
+        static void apply(EntityManager& entityManager, sf::Vector2u windowSize);
+    };
+
+    class EnemyMovementSystem
+    {
+    private:
+        static constexpr float ENEMY_MOVEMENT_SPEED = 0.1f;
+    public:
+        static void apply(EntityManager& entityManager);
+    };
 }
+
+// TODO: Enemy firing system, game over system, scoring system, pausing system
