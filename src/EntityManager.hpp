@@ -16,6 +16,7 @@ private:
     registry m_registry;
     std::unordered_map<std::string, sf::Texture> m_textures;
     std::unordered_map<entity_t, sf::Sprite> m_sprites;
+    int m_Cols;
 
     void loadTexture(const std::string& texturePath, const std::string& textureName);
     void createSprite(entity_t entity, std::string textureName);
@@ -27,6 +28,8 @@ private:
 
     void spawnEnemies();
     void spawnBlocks();
+
+    void updateEntities();
 
 public:
     EntityManager(int  windowWidth, int windowHeight);

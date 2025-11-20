@@ -39,6 +39,7 @@ void Game::passiveUpdates()
     System::CollisionSystem::apply(m_entityManager);
     System::OutOfBoundsSystem::apply(m_entityManager, m_window.getSize());
     System::EnemyMovementSystem::apply(m_entityManager);
+    System::EnemyFiringSystem::apply(m_entityManager, m_window.getSize());
 }
 
 void Game::activeUpdates(const sf::Event::KeyPressed* key)

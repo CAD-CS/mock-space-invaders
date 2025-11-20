@@ -74,6 +74,8 @@ void EntityManager::destroyEntity(entity_t entity)
         std::cout << "Removing entity: " << m_registry.entityNames_map[entity] << " from enemy tag" << std::endl;
         m_registry.enemies_tag.erase(position);
     }
+
+    updateEntities();
 }
 
 registry& EntityManager::getRegistry() { return m_registry;}
@@ -121,6 +123,7 @@ void EntityManager::init(int windowWidth, int windowHeight)
 
     initVelocity(player);
 
+    updateEntities();
 }
 
 void EntityManager::initPosition(entity_t entity, float x, float y)
@@ -161,8 +164,10 @@ void EntityManager::spawnEnemies()
             initVelocity(enemy);
             m_registry.enemies_tag.push_back(enemy);
             m_registry.hittables_tag.push_back(enemy);
+            m_registry.enemyPositions_map.insert({enemy, {row, col}});
         }
     }
+    m_Cols = cols;
 }
 
 void EntityManager::spawnBlocks()
@@ -181,4 +186,28 @@ void EntityManager::spawnBlocks()
         m_registry.hittables_tag.push_back(block);
     }
 
+}
+
+void EntityManager::updateEntities()
+{
+    // Find lowest enemy in each column
+    std::unordered_map<int, entity_t> lowestEnemies;
+    for (int col = 0; col < m_Cols; ++col)
+    {
+        for (const auto& enemy : m_registry.enemies_tag)
+        {
+            if (m_registry.enemyPositions_map[enemy].col == col)
+            {
+                if (!lowestEnemies.contains(col))
+                {
+                    lowestEnemies[col] = enemy;
+                }
+                if (m_registry.enemyPositions_map[enemy].row > m_registry.enemyPositions_map[lowestEnemies[col]].row)
+                {
+                    lowestEnemies[col] = enemy;
+                }    
+            }
+        }
+    }
+    m_registry.lowestEnemies_map = lowestEnemies;
 }

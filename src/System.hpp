@@ -53,6 +53,12 @@ namespace System
     public:
         static void apply(EntityManager& entityManager);
     };
+
+    class EnemyFiringSystem
+    {
+    public:
+        static void apply(EntityManager& entityManager, sf::Vector2u windowSize);
+    };
 }
 
 // TODO: Enemy firing system, game over system, scoring system, pausing system

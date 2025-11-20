@@ -86,10 +86,6 @@ void System::CollisionSystem::apply(EntityManager& entityManager)
     {
         for (auto& hittable : entityManager.getRegistry().hittables_tag)
         {
-            if (hittable == 4 )
-            {
-                std::cout << "IN COLLISION SYSTEM Getting entity sprite for entity: " << hittable << " Name: " << entityManager.getRegistry().entityNames_map[hittable] << std::endl;
-            }
             if (isColliding(entityManager.getSprite(projectile), entityManager.getSprite(hittable)))
             {
                 spritesToRemove.push_back(projectile);
@@ -151,13 +147,27 @@ void System::EnemyMovementSystem::apply(EntityManager& entityManager)
 {
     for (auto& enemy : entityManager.getRegistry().enemies_tag)
     {
-        if (enemy == 4 )
-        {
-            std::cout << "IN ENEMY MOVEMENT SYSTEM Getting entity sprite for entity: " << enemy << " Name: " << entityManager.getRegistry().entityNames_map[enemy] << std::endl;
-        }
         sf::Sprite& enemySprite = entityManager.getSprite(enemy);
         enemySprite.move({0.f, ENEMY_MOVEMENT_SPEED});
     }
 }
 
-// Systems to implement: enemy shooting system, score system, pausing system
+void System::EnemyFiringSystem::apply(EntityManager& entityManager, sf::Vector2u windowSize)
+{
+    for (auto& [col, enemy] : entityManager.getRegistry().lowestEnemies_map)
+    {
+        std::cout << "Enemy " << enemy << " is firing a projectile." << std::endl;
+        entity_t newProjectile = entityManager.createEntity("Projectile");
+
+        sf::Sprite& projectileSprite = entityManager.getSprite(newProjectile);
+
+        float x = entityManager.getSprite(enemy).getGlobalBounds().size.x / 2.f + entityManager.getSprite(enemy).getGlobalBounds().position.x - projectileSprite.getGlobalBounds().size.x / 2.f;
+
+        float y =  entityManager.getSprite(enemy).getGlobalBounds().position.y + entityManager.getSprite(enemy).getGlobalBounds().size.y + 1.f; 
+
+        projectileSprite.setPosition({x, y});
+
+        entityManager.getRegistry().projectiles_tag.push_back(newProjectile);
+        entityManager.getRegistry().velocities_map.insert({newProjectile, {0.f, 0.50f}});
+    }
+}
