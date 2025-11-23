@@ -7,6 +7,8 @@
 
 namespace System
 {
+    static constexpr float PROJECTILE_MOVEMENT_SPEED = 2.f;
+    static bool isColliding(const sf::Sprite& spriteA, const sf::Sprite& spriteB);
     class MovementSystem
     {
     private:
@@ -24,8 +26,6 @@ namespace System
     
     class FiringSystem
     {
-    private:
-        static constexpr float PROJECTILE_MOVEMENT_SPEED = 0.50f;
     public:
         void static apply(EntityManager& entityManager, const sf::Event::KeyPressed* key, sf::Vector2u windowSize);  
     };
@@ -49,7 +49,7 @@ namespace System
     class EnemyMovementSystem
     {
     private:
-        static constexpr float ENEMY_MOVEMENT_SPEED = 0.1f;
+        static constexpr float ENEMY_MOVEMENT_SPEED = 0.5f;
     public:
         static void apply(EntityManager& entityManager);
     };
@@ -57,7 +57,13 @@ namespace System
     class EnemyFiringSystem
     {
     public:
-        static void apply(EntityManager& entityManager, sf::Vector2u windowSize);
+        static void apply(EntityManager& entityManager, sf::Vector2u windowSize, sf::Clock& clock);
+    };
+
+    class ScoringSystem
+    {
+    public:
+        static void apply(EntityManager& entityManager, int& score);
     };
 }
 

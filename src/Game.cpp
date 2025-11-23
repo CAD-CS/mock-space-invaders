@@ -2,7 +2,7 @@
 #include "System.hpp"
 
 Game::Game(int windowWidth, int windowHeight, const std::string& title)
-: m_window(sf::VideoMode({static_cast<unsigned int>(windowWidth), static_cast<unsigned int>(windowHeight)}), title), m_entityManager(windowWidth, windowHeight)
+: m_window(sf::VideoMode({static_cast<unsigned int>(windowWidth), static_cast<unsigned int>(windowHeight)}), title), m_entityManager(windowWidth, windowHeight), m_clock()
 {}
 
 void Game::run()
@@ -39,7 +39,7 @@ void Game::passiveUpdates()
     System::CollisionSystem::apply(m_entityManager);
     System::OutOfBoundsSystem::apply(m_entityManager, m_window.getSize());
     System::EnemyMovementSystem::apply(m_entityManager);
-    System::EnemyFiringSystem::apply(m_entityManager, m_window.getSize());
+    System::EnemyFiringSystem::apply(m_entityManager, m_window.getSize(), m_clock);
 }
 
 void Game::activeUpdates(const sf::Event::KeyPressed* key)

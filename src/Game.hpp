@@ -1,11 +1,14 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
+#include <SFML/System.hpp>
 #include "EntityManager.hpp"
 
 class Game 
 {
 private:
     sf::RenderWindow m_window;
+    sf::Clock m_clock;
+    int score;
 
     EntityManager m_entityManager;
 

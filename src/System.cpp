@@ -72,7 +72,7 @@ void System::FiringSystem::apply(EntityManager& entityManager, const sf::Event::
         projectileSprite.setPosition({x, y});
 
         entityManager.getRegistry().projectiles_tag.push_back(newProjectile);
-        entityManager.getRegistry().velocities_map.insert({newProjectile, {0.f, -PROJECTILE_MOVEMENT_SPEED}});
+        entityManager.getRegistry().velocities_map.insert({newProjectile, {0.f, -System::PROJECTILE_MOVEMENT_SPEED}});
 
         return;
     }
@@ -82,14 +82,18 @@ void System::CollisionSystem::apply(EntityManager& entityManager)
 {
     std::vector<entity_t> spritesToRemove;
 
-    for (auto& projectile : entityManager.getRegistry().projectiles_tag)
+    for (auto& hittable1 : entityManager.getRegistry().hittables_tag)
     {
-        for (auto& hittable : entityManager.getRegistry().hittables_tag)
+        for (auto& hittable2 : entityManager.getRegistry().hittables_tag)
         {
-            if (isColliding(entityManager.getSprite(projectile), entityManager.getSprite(hittable)))
+            if (hittable1 == hittable2)
             {
-                spritesToRemove.push_back(projectile);
-                spritesToRemove.push_back(hittable);
+                continue;
+            }
+            if (isColliding(entityManager.getSprite(hittable1), entityManager.getSprite(hittable2)))
+            {
+                spritesToRemove.push_back(hittable1);
+                spritesToRemove.push_back(hittable2);
             }
         }
     }
@@ -100,7 +104,7 @@ void System::CollisionSystem::apply(EntityManager& entityManager)
     }
 }
 
-bool System::CollisionSystem::isColliding(const sf::Sprite& spriteA, const sf::Sprite& spriteB)
+bool System::isColliding(const sf::Sprite& spriteA, const sf::Sprite& spriteB)
 {
     sf::FloatRect boundsA = spriteA.getGlobalBounds();
     sf::FloatRect boundsB = spriteB.getGlobalBounds();
@@ -152,11 +156,15 @@ void System::EnemyMovementSystem::apply(EntityManager& entityManager)
     }
 }
 
-void System::EnemyFiringSystem::apply(EntityManager& entityManager, sf::Vector2u windowSize)
+void System::EnemyFiringSystem::apply(EntityManager& entityManager, sf::Vector2u windowSize, sf::Clock& clock)
 {
+    if (clock.getElapsedTime().asSeconds() < 3.f)
+    {
+        return;
+    }
+
     for (auto& [col, enemy] : entityManager.getRegistry().lowestEnemies_map)
     {
-        std::cout << "Enemy " << enemy << " is firing a projectile." << std::endl;
         entity_t newProjectile = entityManager.createEntity("Projectile");
 
         sf::Sprite& projectileSprite = entityManager.getSprite(newProjectile);
@@ -170,4 +178,25 @@ void System::EnemyFiringSystem::apply(EntityManager& entityManager, sf::Vector2u
         entityManager.getRegistry().projectiles_tag.push_back(newProjectile);
         entityManager.getRegistry().velocities_map.insert({newProjectile, {0.f, 0.50f}});
     }
+    clock.restart();
+}
+
+
+void System::ScoringSystem::apply(EntityManager& entityManager, int& score)
+{
+    int pointsPerHit = 10;
+    int hits = 0;
+
+    for (auto& projectile : entityManager.getRegistry().projectiles_tag)
+    {
+        for (auto& enemy : entityManager.getRegistry().enemies_tag)
+        {
+            if (System::isColliding(entityManager.getSprite(projectile), entityManager.getSprite(enemy)))
+            {
+                hits++;
+            }
+        }
+    }
+
+    score += hits * pointsPerHit;
 }
