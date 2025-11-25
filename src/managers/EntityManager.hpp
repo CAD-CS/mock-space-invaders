@@ -12,33 +12,31 @@ class EntityManager
 
 private:
     entity_t m_entities;
-    entity_t m_player;
     registry m_registry;
     std::unordered_map<std::string, sf::Texture> m_textures;
     std::unordered_map<entity_t, sf::Sprite> m_sprites;
     int m_Cols;
 
-    void loadTexture(const std::string& texturePath, const std::string& textureName);
-    void createSprite(entity_t entity, std::string textureName);
-
     void init(int windowWidth, int windowHeight);
 
-    void initPosition(entity_t entity, float x, float y);
-    void initVelocity(entity_t entity);
+    void loadTextures();
+    void loadTexture(const std::string& texturePath, const std::string& textureName);
 
-    void spawnEnemies();
-    void spawnBlocks();
+    void createSprite(entity_t entity, std::string textureName);
 
     void updateEntities();
+
 
 public:
     EntityManager(int  windowWidth, int windowHeight);
     ~EntityManager();
 
     entity_t createEntity(std::string textureName);
-    void destroyEntity(entity_t entity);
-    registry& getRegistry();
-    entity_t getPlayer();
-    sf::Sprite& getSprite(entity_t entity);
+
     std::unordered_map<entity_t, sf::Sprite>& getSprites();
+    sf::Sprite& getSprite(entity_t entity);
+    entity_t getPlayer();
+
+    void destroyEntity(entity_t entity);
+
 };

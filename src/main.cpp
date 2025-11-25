@@ -1,8 +1,8 @@
 #include <string>
-#include "Game.hpp"
+#include "core/Game.hpp"
 
-const int WINDOW_WIDTH = 1200;
-const int WINDOW_HEIGHT = 900;
+const int WINDOW_WIDTH = 1900;
+const int WINDOW_HEIGHT = 1000;
 
 int main()
 {
