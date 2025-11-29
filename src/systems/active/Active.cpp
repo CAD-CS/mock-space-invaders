@@ -41,6 +41,7 @@ void Active::Firing::apply(EntityManager& entityManager, registry& registry, con
         projectileSprite.setPosition({x, y});
 
         registry.projectiles_tag.push_back(newProjectile);
+        registry.hittables_tag.push_back(newProjectile);
         registry.velocities_map.insert({newProjectile, {0.f, -Util::PROJECTILE_MOVEMENT_SPEED}});
 
         return;

@@ -27,7 +27,6 @@ private:
 
     void createSprite(entity_t entity, std::string textureName);
 
-    void updateEntities();
 
 
 public:
@@ -39,6 +38,8 @@ public:
     std::unordered_map<entity_t, sf::Sprite>& getSprites();
     sf::Sprite& getSprite(entity_t entity);
     entity_t getPlayer();
+
+    void updateEntities();
 
     void destroyEntity(entity_t entity);
 };

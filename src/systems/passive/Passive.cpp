@@ -68,7 +68,7 @@ void Passive::EnemyMovement::apply(EntityManager& entityManager, registry& regis
 
 void Passive::EnemyFiring::apply(EntityManager& entityManager, registry& registry, sf::Vector2u windowSize, sf::Clock& clock)
 {
-    if (clock.getElapsedTime().asSeconds() < 3.f)
+    if (clock.getElapsedTime().asSeconds() < 1.f)
     {
         return;
     }
@@ -86,7 +86,8 @@ void Passive::EnemyFiring::apply(EntityManager& entityManager, registry& registr
         projectileSprite.setPosition({x, y});
 
         registry.projectiles_tag.push_back(newProjectile);
-        registry.velocities_map.insert({newProjectile, {0.f, 0.50f}});
+        registry.hittables_tag.push_back(newProjectile);
+        registry.velocities_map.insert({newProjectile, {0.f, 1.f}});
     }
     clock.restart();
 }

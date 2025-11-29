@@ -26,7 +26,6 @@ void EntityManager::init(int windowWidth, int windowHeight)
 
 void EntityManager::loadTextures()
 {
-    std::cout << "Directory: " << std::filesystem::current_path() << std::endl;
     loadTexture("./assets/player.jpg", "Player");
     loadTexture("./assets/enemy.jpg", "Enemy");
     loadTexture("./assets/block.jpg", "Block");
@@ -70,6 +69,10 @@ void EntityManager::updateEntities()
                 }    
             }
         }
+    }
+    for (const auto& [col, enemy] : lowestEnemies)
+    {
+        std::cout << "Lowest enemy in column " << col << " is entity " << enemy << " at row " << m_registry.enemyPositions_map[enemy].row << std::endl;
     }
     m_registry.lowestEnemies_map = lowestEnemies;
 }
@@ -128,9 +131,19 @@ void EntityManager::destroyEntity(entity_t entity)
 {
     std::cout << "Destroying entity: " << entity << " Name: " << m_registry.entityNames_map[entity] << std::endl;
 
+    std::cout << "Sizes of mappings and tags before deletion:" << std::endl;
+    std::cout << "Sprites map size: " << m_sprites.size() << std::endl;
+    std::cout << "Velocities map size: " << m_registry.velocities_map.size() << std::endl;
+    std::cout << "Enemy Positions map size: " << m_registry.enemyPositions_map.size() << std::endl;
+    std::cout << "Entity Names map size: " << m_registry.entityNames_map.size() << std::endl;
+    std::cout << "Hittables tag size: " << m_registry.hittables_tag.size() << std::endl;
+    std::cout << "Projectiles tag size: " << m_registry.projectiles_tag.size() << std::endl;
+    std::cout << "Enemies tag size: " << m_registry.enemies_tag.size() << std::endl;
 
     deleteFromMapping(m_sprites, entity);
     deleteFromMapping(m_registry.velocities_map, entity);
+    deleteFromMapping(m_registry.enemyPositions_map, entity);
+    deleteFromMapping(m_registry.entityNames_map, entity);
 
     deleteFromVector(m_registry.hittables_tag, entity);
     deleteFromVector(m_registry.projectiles_tag, entity);

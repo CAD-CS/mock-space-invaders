@@ -47,6 +47,8 @@ void Initializer::initializeEnemies()
             m_registry.enemyPositions_map.insert({enemy, {row, col}});
         }
     }
+
+    m_entityManager.updateEntities();
 }
 
 void Initializer::initializeBlocks()
