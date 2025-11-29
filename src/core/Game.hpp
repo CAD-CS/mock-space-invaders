@@ -4,17 +4,18 @@
 #include "../managers/EntityManager.hpp"
 #include "../managers/SystemManager.hpp"
 #include "../model/Registry.hpp"
+#include "Initializer.hpp"
 
 class Game 
 {
 private:
     sf::RenderWindow m_window;
     sf::Clock m_clock;
-    int score;
-
+    registry m_registry;
     EntityManager m_entityManager;
     SystemManager m_systemManager;
-    registry m_registry;
+    Initializer m_initializer;
+    int score;
 
     void process();
     void passiveUpdates();

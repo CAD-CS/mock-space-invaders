@@ -1,4 +1,5 @@
 #include "Game.hpp"
+#include <iostream>
 
 Game::Game(int windowWidth, int windowHeight, const std::string& title)
 : 
@@ -7,14 +8,18 @@ m_clock(),
 m_registry(),
 m_entityManager(windowWidth, windowHeight, m_registry),
 m_systemManager(m_entityManager, m_registry),
+m_initializer(m_entityManager, m_registry, windowWidth, windowHeight),
 score(0)
-{}
+{
+    std::cout << "Game initialized with window size: " << windowWidth << "x" << windowHeight << std::endl;
+}
 
 void Game::run()
 {
     m_window.setKeyRepeatEnabled(true);
     m_window.setFramerateLimit(60);
 
+    std::cout << "Entering main game loop." << std::endl;
     while (m_window.isOpen())
     {
         process();

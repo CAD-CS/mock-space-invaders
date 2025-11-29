@@ -3,6 +3,7 @@
 #include "../util/Util.hpp"
 #include <cassert>
 #include <iostream>
+#include <filesystem>
 
 EntityManager::EntityManager(int windowWidth, int windowHeight, registry& registry)
 : m_entities(0), m_registry(registry)
@@ -25,11 +26,12 @@ void EntityManager::init(int windowWidth, int windowHeight)
 
 void EntityManager::loadTextures()
 {
-    loadTexture("assets/player.jpg", "Player");
-    loadTexture("assets/enemy.jpg", "Enemy");
-    loadTexture("assets/block.jpg", "Block");
-    loadTexture("assets/player_projectile.jpg", "PlayerProjectile");
-    loadTexture("assets/enemy_projectile.jpg", "EnemyProjectile");
+    std::cout << "Directory: " << std::filesystem::current_path() << std::endl;
+    loadTexture("./assets/player.jpg", "Player");
+    loadTexture("./assets/enemy.jpg", "Enemy");
+    loadTexture("./assets/block.jpg", "Block");
+    loadTexture("./assets/player_projectile.jpg", "PlayerProjectile");
+    loadTexture("./assets/enemy_projectile.jpg", "EnemyProjectile");
 }
 
 void EntityManager::loadTexture(const std::string& texturePath, const std::string& textureName)
