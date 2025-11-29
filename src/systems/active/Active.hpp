@@ -1,6 +1,7 @@
 #pragma once
 
-#include "EntityManager.hpp"
+#include "../../managers/EntityManager.hpp"
+#include "../../model/Registry.hpp"
 
 namespace Active
 {

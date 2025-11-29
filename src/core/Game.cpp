@@ -1,8 +1,13 @@
 #include "Game.hpp"
-#include "System.hpp"
 
 Game::Game(int windowWidth, int windowHeight, const std::string& title)
-: m_window(sf::VideoMode({static_cast<unsigned int>(windowWidth), static_cast<unsigned int>(windowHeight)}), title), m_entityManager(windowWidth, windowHeight), m_clock()
+: 
+m_window(sf::VideoMode({static_cast<unsigned int>(windowWidth), static_cast<unsigned int>(windowHeight)}), title), 
+m_clock(),
+m_registry(),
+m_entityManager(windowWidth, windowHeight, m_registry),
+m_systemManager(m_entityManager, m_registry),
+score(0)
 {}
 
 void Game::run()
@@ -35,17 +40,12 @@ void Game::process()
 
 void Game::passiveUpdates()
 {
-    System::PhysicsSystem::apply(m_entityManager);
-    System::CollisionSystem::apply(m_entityManager);
-    System::OutOfBoundsSystem::apply(m_entityManager, m_window.getSize());
-    System::EnemyMovementSystem::apply(m_entityManager);
-    System::EnemyFiringSystem::apply(m_entityManager, m_window.getSize(), m_clock);
+    m_systemManager.applyPassiveSystems(m_window.getSize(), m_clock, score);
 }
 
 void Game::activeUpdates(const sf::Event::KeyPressed* key)
 {
-    System::MovementSystem::apply(m_entityManager, key, m_window.getSize());
-    System::FiringSystem::apply(m_entityManager, key, m_window.getSize());
+    m_systemManager.applyActiveSystems(m_window.getSize(), key);
 }
 
 void Game::render()

@@ -1,7 +1,9 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
-#include "EntityManager.hpp"
+#include "../managers/EntityManager.hpp"
+#include "../managers/SystemManager.hpp"
+#include "../model/Registry.hpp"
 
 class Game 
 {
@@ -11,6 +13,8 @@ private:
     int score;
 
     EntityManager m_entityManager;
+    SystemManager m_systemManager;
+    registry m_registry;
 
     void process();
     void passiveUpdates();

@@ -3,7 +3,8 @@
 #include <cstdint>
 #include <vector>
 #include <string>
-#include "Components.hpp"
+#include "../model/Components.hpp"
+#include "../model/Registry.hpp"
 
 constexpr entity_t MAX_ENTITIES = 100;
 
@@ -12,10 +13,12 @@ class EntityManager
 
 private:
     entity_t m_entities;
-    registry m_registry;
+    registry& m_registry;
+
+    int m_Cols;
+
     std::unordered_map<std::string, sf::Texture> m_textures;
     std::unordered_map<entity_t, sf::Sprite> m_sprites;
-    int m_Cols;
 
     void init(int windowWidth, int windowHeight);
 
@@ -28,7 +31,7 @@ private:
 
 
 public:
-    EntityManager(int  windowWidth, int windowHeight);
+    EntityManager(int  windowWidth, int windowHeight, registry& registry);
     ~EntityManager();
 
     entity_t createEntity(std::string textureName);
@@ -38,5 +41,4 @@ public:
     entity_t getPlayer();
 
     void destroyEntity(entity_t entity);
-
 };

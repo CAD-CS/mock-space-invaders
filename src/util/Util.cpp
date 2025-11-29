@@ -1,6 +1,6 @@
 #include "Util.hpp"
 
-static bool Util::isWithinWindow(const sf::Sprite& sprite, const sf::Vector2u& windowSize, sf::Keyboard::Key direction)
+bool Util::isWithinWindow(const sf::Sprite& sprite, const sf::Vector2u& windowSize, sf::Keyboard::Key direction)
 {
     switch (direction)
     {
@@ -20,7 +20,7 @@ static bool Util::isWithinWindow(const sf::Sprite& sprite, const sf::Vector2u& w
     return true;
 }
 
-static bool Util::isColliding(const sf::Sprite& spriteA, const sf::Sprite& spriteB)
+bool Util::isColliding(const sf::Sprite& spriteA, const sf::Sprite& spriteB)
 {
     sf::FloatRect boundsA = spriteA.getGlobalBounds();
     sf::FloatRect boundsB = spriteB.getGlobalBounds();
@@ -33,7 +33,7 @@ static bool Util::isColliding(const sf::Sprite& spriteA, const sf::Sprite& sprit
 }
 
 
-static bool Util::isOutOfBounds(const sf::Sprite& sprite, const sf::Vector2u& windowSize)
+bool Util::isOutOfBounds(const sf::Sprite& sprite, const sf::Vector2u& windowSize)
 {
     sf::FloatRect bounds = sprite.getGlobalBounds();
 

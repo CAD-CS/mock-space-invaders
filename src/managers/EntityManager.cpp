@@ -1,9 +1,11 @@
 #include "EntityManager.hpp"
 #include "../model/Registry.hpp"
+#include "../util/Util.hpp"
 #include <cassert>
 #include <iostream>
 
-EntityManager::EntityManager(int windowWidth, int windowHeight) : m_entities(0) 
+EntityManager::EntityManager(int windowWidth, int windowHeight, registry& registry)
+: m_entities(0), m_registry(registry)
 {
     m_textures.reserve(MAX_ENTITIES);
     init(windowWidth, windowHeight);
@@ -49,9 +51,8 @@ void EntityManager::createSprite(entity_t entity, std::string textureName)
 
 void EntityManager::updateEntities()
 {
-    // Find lowest enemy in each column
     std::unordered_map<int, entity_t> lowestEnemies;
-    for (int col = 0; col < m_Cols; ++col)
+    for (int col = 0; col < Util::COLUMNS; ++col)
     {
         for (const auto& enemy : m_registry.enemies_tag)
         {
@@ -70,7 +71,6 @@ void EntityManager::updateEntities()
     }
     m_registry.lowestEnemies_map = lowestEnemies;
 }
-
 
 entity_t EntityManager::createEntity(std::string textureName)
 {
@@ -104,21 +104,6 @@ sf::Sprite& EntityManager::getSprite(entity_t entity)
 
 entity_t EntityManager::getPlayer() { return 1; }
 
-void EntityManager::destroyEntity(entity_t entity)
-{
-    std::cout << "Destroying entity: " << entity << " Name: " << m_registry.entityNames_map[entity] << std::endl;
-
-
-    deleteFromMapping(m_sprites, entity);
-    deleteFromMapping(m_registry.velocities_map, entity);
-
-    deleteFromVector(m_registry.hittables_tag, entity);
-    deleteFromVector(m_registry.projectiles_tag, entity);
-    deleteFromVector(m_registry.enemies_tag, entity);
-
-    updateEntities();
-}
-
 template<typename T>
 void deleteFromMapping(std::unordered_map<entity_t, T>& mapping, entity_t entity)
 {
@@ -135,4 +120,19 @@ void deleteFromVector(std::vector<entity_t>& vec, entity_t entity)
     {
         vec.erase(position);
     }
+}
+
+void EntityManager::destroyEntity(entity_t entity)
+{
+    std::cout << "Destroying entity: " << entity << " Name: " << m_registry.entityNames_map[entity] << std::endl;
+
+
+    deleteFromMapping(m_sprites, entity);
+    deleteFromMapping(m_registry.velocities_map, entity);
+
+    deleteFromVector(m_registry.hittables_tag, entity);
+    deleteFromVector(m_registry.projectiles_tag, entity);
+    deleteFromVector(m_registry.enemies_tag, entity);
+
+    updateEntities();
 }

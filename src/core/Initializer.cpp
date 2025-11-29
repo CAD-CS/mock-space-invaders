@@ -1,4 +1,5 @@
 #include "Initializer.hpp"
+#include "../util/Util.hpp"
 
 Initializer::Initializer(EntityManager& entityManager, registry& registry, int windowWidth, int windowHeight) 
 : m_entityManager(entityManager), m_registry(registry)
@@ -24,7 +25,7 @@ void Initializer::initializePlayer(int windowWidth, int windowHeight)
 void Initializer::initializeEnemies()
 {
     const int rows = 2;
-    const int cols = 2;
+    const int cols = Util::COLUMNS;
     const float spacingX = 20.f;
     const float spacingY = 20.f;
     const float startX = 50.f;
