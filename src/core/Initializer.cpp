@@ -7,7 +7,7 @@ Initializer::Initializer(EntityManager& entityManager, registry& registry, int w
     initializePlayer(windowWidth, windowHeight);
     initializeEnemies();
     initializeBlocks();
-    initializeGameOverMarker(windowWidth, windowHeight);
+    initializeEnvironmentEntities(windowWidth, windowHeight);
 }
 
 void Initializer::initializePlayer(int windowWidth, int windowHeight)
@@ -70,14 +70,35 @@ void Initializer::initializeBlocks()
 
 }
 
-void Initializer::initializeGameOverMarker(int windowWidth, int windowHeight)
+void Initializer::initializeEnvironmentEntities(int windowWidth, int windowHeight)
 {
-    entity_t marker = m_entityManager.createEntity("GameOverMarker");
-    sf::Sprite& sprite = m_entityManager.getSprite(marker);
-    float x = 0.f;
-    float y = 900.f;
-    initPosition(marker, x, y);
-    m_registry.environment_tag.push_back(marker);
+    {
+        entity_t gameOverMarker = m_entityManager.createEntity("GameOverMarker");
+        sf::Sprite& sprite = m_entityManager.getSprite(gameOverMarker);
+        float x = 0.f;
+        float y = 900.f;
+        initPosition(gameOverMarker, x, y);
+        m_registry.environment_tag.push_back(gameOverMarker);
+    }
+
+    {
+        entity_t pauseButton = m_entityManager.createEntity("Pause");
+        sf::Sprite& pauseSprite = m_entityManager.getSprite(pauseButton);
+        float x = windowWidth - pauseSprite.getLocalBounds().size.x - 10.f;
+        float y = 10.f;
+        initPosition(pauseButton, x, y);
+        m_registry.environment_tag.push_back(pauseButton);
+    }
+
+    {
+        entity_t unpauseButton = m_entityManager.createEntity("Unpause");
+        sf::Sprite& unpauseSprite = m_entityManager.getSprite(unpauseButton);
+        float x = windowWidth - unpauseSprite.getLocalBounds().size.x - 10.f;
+        float y = 10.f;
+        initPosition(unpauseButton, x, y);
+        m_registry.environment_tag.push_back(unpauseButton);
+    }
+
 }
 
 void Initializer::initPosition(entity_t entity, float x, float y)

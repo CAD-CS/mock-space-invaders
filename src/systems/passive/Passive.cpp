@@ -126,7 +126,6 @@ void Passive::GameOverCheck::apply(EntityManager& entityManager, registry& regis
                 if (Util::isColliding(enemySprite, gameOverMarker))
                 {
                     isGameOver = true;
-                    throw std::runtime_error("Game Over!");
                     return;
                 }
             }
