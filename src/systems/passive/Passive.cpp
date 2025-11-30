@@ -1,5 +1,6 @@
 #include "Passive.hpp"
 #include "../../util/Util.hpp"
+#include <iostream>
 
 void Passive::Physics::apply(EntityManager& entityManager, registry& registry)
 {
@@ -110,4 +111,25 @@ void Passive::Scoring::apply(EntityManager& entityManager, registry& registry, i
     }
 
     score += hits * pointsPerHit;
+}
+
+void Passive::GameOverCheck::apply(EntityManager& entityManager, registry& registry, bool& isGameOver)
+{
+    for (auto& environment : registry.environment_tag)
+    {
+        if (registry.entityNames_map[environment] == "GameOverMarker")
+        {
+            sf::Sprite& gameOverMarker = entityManager.getSprite(environment);
+            for (auto& enemy : registry.enemies_tag)
+            {
+                sf::Sprite& enemySprite = entityManager.getSprite(enemy);
+                if (Util::isColliding(enemySprite, gameOverMarker))
+                {
+                    isGameOver = true;
+                    throw std::runtime_error("Game Over!");
+                    return;
+                }
+            }
+        }
+    }
 }

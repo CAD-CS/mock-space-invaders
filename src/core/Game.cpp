@@ -6,20 +6,18 @@ Game::Game(int windowWidth, int windowHeight, const std::string& title)
 m_window(sf::VideoMode({static_cast<unsigned int>(windowWidth), static_cast<unsigned int>(windowHeight)}), title), 
 m_clock(),
 m_registry(),
+m_score(0),
+m_isGameOver(false),
 m_entityManager(windowWidth, windowHeight, m_registry),
-m_systemManager(m_entityManager, m_registry),
-m_initializer(m_entityManager, m_registry, windowWidth, windowHeight),
-score(0)
-{
-    std::cout << "Game initialized with window size: " << windowWidth << "x" << windowHeight << std::endl;
-}
+m_systemManager(m_entityManager, m_registry, m_score, m_isGameOver),
+m_initializer(m_entityManager, m_registry, windowWidth, windowHeight)
+{}
 
 void Game::run()
 {
     m_window.setKeyRepeatEnabled(true);
     m_window.setFramerateLimit(60);
 
-    std::cout << "Entering main game loop." << std::endl;
     while (m_window.isOpen())
     {
         process();
@@ -45,7 +43,7 @@ void Game::process()
 
 void Game::passiveUpdates()
 {
-    m_systemManager.applyPassiveSystems(m_window.getSize(), m_clock, score);
+    m_systemManager.applyPassiveSystems(m_window.getSize(), m_clock, m_score, m_isGameOver);
 }
 
 void Game::activeUpdates(const sf::Event::KeyPressed* key)

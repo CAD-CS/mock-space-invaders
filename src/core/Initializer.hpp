@@ -12,6 +12,7 @@ private:
     void initializePlayer(int windowWidth, int windowHeight);
     void initializeEnemies();
     void initializeBlocks();
+    void initializeGameOverMarker(int windowWidth, int windowHeight);
     void initPosition(entity_t entity, float x, float y);
     void initVelocity(entity_t entity);
 public:

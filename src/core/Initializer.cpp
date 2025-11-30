@@ -7,6 +7,7 @@ Initializer::Initializer(EntityManager& entityManager, registry& registry, int w
     initializePlayer(windowWidth, windowHeight);
     initializeEnemies();
     initializeBlocks();
+    initializeGameOverMarker(windowWidth, windowHeight);
 }
 
 void Initializer::initializePlayer(int windowWidth, int windowHeight)
@@ -67,6 +68,16 @@ void Initializer::initializeBlocks()
         m_registry.hittables_tag.push_back(block);
     }
 
+}
+
+void Initializer::initializeGameOverMarker(int windowWidth, int windowHeight)
+{
+    entity_t marker = m_entityManager.createEntity("GameOverMarker");
+    sf::Sprite& sprite = m_entityManager.getSprite(marker);
+    float x = 0.f;
+    float y = 900.f;
+    initPosition(marker, x, y);
+    m_registry.environment_tag.push_back(marker);
 }
 
 void Initializer::initPosition(entity_t entity, float x, float y)

@@ -31,6 +31,7 @@ void EntityManager::loadTextures()
     loadTexture("./assets/block.jpg", "Block");
     loadTexture("./assets/player_projectile.jpg", "PlayerProjectile");
     loadTexture("./assets/enemy_projectile.jpg", "EnemyProjectile");
+    loadTexture("./assets/game_over_mark.jpg", "GameOverMarker");
 }
 
 void EntityManager::loadTexture(const std::string& texturePath, const std::string& textureName)
@@ -70,10 +71,7 @@ void EntityManager::updateEntities()
             }
         }
     }
-    for (const auto& [col, enemy] : lowestEnemies)
-    {
-        std::cout << "Lowest enemy in column " << col << " is entity " << enemy << " at row " << m_registry.enemyPositions_map[enemy].row << std::endl;
-    }
+
     m_registry.lowestEnemies_map = lowestEnemies;
 }
 
@@ -93,16 +91,6 @@ std::unordered_map<entity_t, sf::Sprite>& EntityManager::getSprites() { return m
 
 sf::Sprite& EntityManager::getSprite(entity_t entity)
 {
-    if (!m_sprites.contains(entity)) 
-    {
-        // Print all sprites with their names for debugging
-        std::cout << "Current sprites in EntityManager:" << std::endl;
-        for (const auto& [ent, sprite] : m_sprites) {
-            std::cout << "Entity ID: " << ent << ", Name: " << m_registry.entityNames_map[ent] << std::endl;
-        }
-        std::cout << "Attempted to access sprite for non-existent entity: " << entity << " --> " << m_registry.entityNames_map[entity] << std::endl;
-        std::cerr << "Error: Attempted to access sprite for non-existent entity " << entity << std::endl;
-    }
     assert(m_sprites.contains(entity) && "Entity does not have a sprite component.");
     return m_sprites.at(entity);
 }
@@ -127,23 +115,29 @@ void deleteFromVector(std::vector<entity_t>& vec, entity_t entity)
     }
 }
 
+void deleteFromLowestEnemiesMappping(std::unordered_map<int, entity_t>& mapping, entity_t entity)
+{
+    for (auto it = mapping.begin(); it != mapping.end(); )
+    {
+        if (it->second == entity)
+        {
+            it = mapping.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
+}
+
 void EntityManager::destroyEntity(entity_t entity)
 {
-    std::cout << "Destroying entity: " << entity << " Name: " << m_registry.entityNames_map[entity] << std::endl;
-
-    std::cout << "Sizes of mappings and tags before deletion:" << std::endl;
-    std::cout << "Sprites map size: " << m_sprites.size() << std::endl;
-    std::cout << "Velocities map size: " << m_registry.velocities_map.size() << std::endl;
-    std::cout << "Enemy Positions map size: " << m_registry.enemyPositions_map.size() << std::endl;
-    std::cout << "Entity Names map size: " << m_registry.entityNames_map.size() << std::endl;
-    std::cout << "Hittables tag size: " << m_registry.hittables_tag.size() << std::endl;
-    std::cout << "Projectiles tag size: " << m_registry.projectiles_tag.size() << std::endl;
-    std::cout << "Enemies tag size: " << m_registry.enemies_tag.size() << std::endl;
-
     deleteFromMapping(m_sprites, entity);
+    
+    deleteFromMapping(m_registry.entityNames_map, entity);
     deleteFromMapping(m_registry.velocities_map, entity);
     deleteFromMapping(m_registry.enemyPositions_map, entity);
-    deleteFromMapping(m_registry.entityNames_map, entity);
+    deleteFromLowestEnemiesMappping(m_registry.lowestEnemies_map, entity);
 
     deleteFromVector(m_registry.hittables_tag, entity);
     deleteFromVector(m_registry.projectiles_tag, entity);

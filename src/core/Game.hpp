@@ -11,11 +11,12 @@ class Game
 private:
     sf::RenderWindow m_window;
     sf::Clock m_clock;
+    int m_score;
+    bool m_isGameOver;
     registry m_registry;
     EntityManager m_entityManager;
     SystemManager m_systemManager;
     Initializer m_initializer;
-    int score;
 
     void process();
     void passiveUpdates();

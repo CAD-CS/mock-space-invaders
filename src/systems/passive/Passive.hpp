@@ -40,4 +40,10 @@ namespace Passive
     public:
         static void apply(EntityManager& entityManager, registry& registry, int& score);
     };
+
+    class GameOverCheck
+    {
+    public:
+        static void apply(EntityManager& entityManager, registry& registry, bool& isGameOver);
+    };
 }
