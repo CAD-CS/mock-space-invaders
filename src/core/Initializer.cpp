@@ -1,5 +1,6 @@
 #include "Initializer.hpp"
 #include "../util/Util.hpp"
+#include <iostream>
 
 Initializer::Initializer(EntityManager& entityManager, registry& registry, int windowWidth, int windowHeight) 
 : m_entityManager(entityManager), m_registry(registry)
@@ -86,6 +87,7 @@ void Initializer::initializeEnvironmentEntities(int windowWidth, int windowHeigh
         sf::Sprite& pauseSprite = m_entityManager.getSprite(pauseButton);
         float x = windowWidth - pauseSprite.getLocalBounds().size.x - 10.f;
         float y = 10.f;
+        std::cout << "Pause and unpause button initialized at (" << x << ", " << y << ")\n";
         initPosition(pauseButton, x, y);
         m_registry.environment_tag.push_back(pauseButton);
     }

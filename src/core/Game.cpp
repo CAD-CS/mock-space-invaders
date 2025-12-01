@@ -10,7 +10,7 @@ m_window(sf::VideoMode({static_cast<unsigned int>(windowWidth), static_cast<unsi
 m_clock(),
 m_registry(),
 m_entityManager(windowWidth, windowHeight, m_registry),
-m_systemManager(m_entityManager, m_registry, m_score, m_isGameOver),
+m_systemManager(m_entityManager, m_registry, m_score, m_isGameOver, m_isPaused),
 m_initializer(m_entityManager, m_registry, windowWidth, windowHeight)
 {}
 
@@ -21,11 +21,8 @@ void Game::run()
 
     while (m_window.isOpen() && !m_isGameOver)
     {
-        if (!m_isPaused)
-        {
-            process();
-            render();
-        }
+        process();
+        render();
     }
 }
 
@@ -38,9 +35,14 @@ void Game::process()
         if (m_event->is<sf::Event::Closed>())
         {
             m_window.close();
-        } else if (const auto* key = m_event->getIf<sf::Event::KeyPressed>())
+        } 
+        else if (const auto* key = m_event->getIf<sf::Event::KeyPressed>())
         {
             activeUpdates(key);
+        }
+        else if (const auto* click = m_event->getIf<sf::Event::MouseButtonPressed>())
+        {
+            activeUpdates(click);
         }
     }
 }
@@ -52,7 +54,12 @@ void Game::passiveUpdates()
 
 void Game::activeUpdates(const sf::Event::KeyPressed* key)
 {
-    m_systemManager.applyActiveSystems(m_window.getSize(), key);
+    m_systemManager.applyActiveSystems(m_window.getSize(), m_isPaused, key);
+}
+
+void Game::activeUpdates(const sf::Event::MouseButtonPressed* click)
+{
+    m_systemManager.applyActiveSystems(m_window.getSize(), m_isPaused, click);
 }
 
 void Game::render()
@@ -63,6 +70,10 @@ void Game::render()
 
     for (const auto& [entity, sprite] : sprites)
     {
+        if (m_registry.entityNames_map[entity] == "Pause" && m_isPaused)
+        {
+            continue;
+        }
         m_window.draw(sprite);
     }
 

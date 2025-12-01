@@ -24,6 +24,7 @@ private:
     void process();
     void passiveUpdates();
     void activeUpdates(const sf::Event::KeyPressed* key);
+    void activeUpdates(const sf::Event::MouseButtonPressed* click);
     void render();
 
 public:

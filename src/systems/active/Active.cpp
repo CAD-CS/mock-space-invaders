@@ -1,5 +1,6 @@
 #include "Active.hpp"
 #include "../../util/Util.hpp"
+#include <iostream>
 
 void Active::Movement::apply(EntityManager& entityManager, const sf::Event::KeyPressed* key, sf::Vector2u windowSize) 
 {
@@ -48,3 +49,30 @@ void Active::Firing::apply(EntityManager& entityManager, registry& registry, con
     }
 }
 
+
+void Active::Pause::apply(sf::Vector2u windowSize, bool& isPaused, const sf::Event::KeyPressed* key)
+{
+    if (key->code == sf::Keyboard::Key::P)
+    {
+        isPaused = !isPaused;
+    }
+}
+void Active::Pause::apply(sf::Vector2u windowSize, bool& isPaused, const sf::Event::MouseButtonPressed* click)
+{
+    auto isClickInsideButton = [windowSize, click]() {
+        int xClick = click->position.x;
+        int yClick = click->position.y;
+        bool isInY = yClick >= 10 && yClick <= 10 + 60;
+        bool isInX = xClick >= static_cast<int>(windowSize.x) - 100 - 10;
+        if (isInX && isInY)
+        {
+            return true;
+        }
+        return false;
+    };
+
+    if (isClickInsideButton())
+    {
+        isPaused = !isPaused;
+    }
+}
