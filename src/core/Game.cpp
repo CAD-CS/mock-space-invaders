@@ -77,5 +77,10 @@ void Game::render()
         m_window.draw(sprite);
     }
 
+    for (const auto& [entity, text] : m_registry.texts_map)
+    {
+        m_window.draw(text);
+    }
+
     m_window.display();
 }

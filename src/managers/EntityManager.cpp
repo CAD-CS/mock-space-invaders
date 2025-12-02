@@ -34,6 +34,7 @@ void EntityManager::loadTextures()
     loadTexture("./assets/game_over_mark.jpg", "GameOverMarker");
     loadTexture("./assets/pause.jpg", "Pause");
     loadTexture("./assets/unpause.jpg", "Unpause");
+    loadTexture("./assets/scoreboard.jpg", "ScoreBoard");
 }
 
 void EntityManager::loadTexture(const std::string& texturePath, const std::string& textureName)

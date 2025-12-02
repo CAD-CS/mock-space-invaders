@@ -3,12 +3,17 @@
 #include <iostream>
 
 Initializer::Initializer(EntityManager& entityManager, registry& registry, int windowWidth, int windowHeight) 
-: m_entityManager(entityManager), m_registry(registry)
+: 
+m_entityManager(entityManager), 
+m_registry(registry),
+m_font("./assets/BOOKOS.TTF"),
+m_scoreBoardLabel(m_font, "SCORE", 12)
 {
     initializePlayer(windowWidth, windowHeight);
     initializeEnemies();
     initializeBlocks();
     initializeEnvironmentEntities(windowWidth, windowHeight);
+    initializeScoreBoard();
 }
 
 void Initializer::initializePlayer(int windowWidth, int windowHeight)
@@ -87,7 +92,6 @@ void Initializer::initializeEnvironmentEntities(int windowWidth, int windowHeigh
         sf::Sprite& pauseSprite = m_entityManager.getSprite(pauseButton);
         float x = windowWidth - pauseSprite.getLocalBounds().size.x - 10.f;
         float y = 10.f;
-        std::cout << "Pause and unpause button initialized at (" << x << ", " << y << ")\n";
         initPosition(pauseButton, x, y);
         m_registry.environment_tag.push_back(pauseButton);
     }
@@ -100,7 +104,21 @@ void Initializer::initializeEnvironmentEntities(int windowWidth, int windowHeigh
         initPosition(unpauseButton, x, y);
         m_registry.environment_tag.push_back(unpauseButton);
     }
+}
 
+void Initializer::initializeScoreBoard()
+{
+    entity_t scoreBoard = m_entityManager.createEntity("ScoreBoard");
+    sf::Sprite& sprite = m_entityManager.getSprite(scoreBoard);
+    float x = 10.f;
+    float y = 10.f;
+    initPosition(scoreBoard, x, y);
+    m_registry.environment_tag.push_back(scoreBoard);
+
+    m_scoreBoardLabel.setPosition({x + 15.f, y + 10.f});
+    m_scoreBoardLabel.setFillColor(sf::Color::Black);
+    m_scoreBoardLabel.setStyle(sf::Text::Bold);
+    m_registry.texts_map.insert({scoreBoard, m_scoreBoardLabel});
 }
 
 void Initializer::initPosition(entity_t entity, float x, float y)
