@@ -2,9 +2,9 @@
 #include "../../util/Util.hpp"
 #include <iostream>
 
-void Active::Movement::apply(EntityManager& entityManager, const sf::Event::KeyPressed* key, sf::Vector2u windowSize) 
+void Active::Movement::apply(GameService& gameService, const sf::Event::KeyPressed* key, sf::Vector2u windowSize) 
 {
-    sf::Sprite& playerSprite = entityManager.getSprite(entityManager.getPlayer());
+    sf::Sprite& playerSprite = gameService.getSprite(gameService.getPlayer());
 
     switch (key->code) {
     case sf::Keyboard::Key::Left:
@@ -26,18 +26,18 @@ void Active::Movement::apply(EntityManager& entityManager, const sf::Event::KeyP
     }
 }
 
-void Active::Firing::apply(EntityManager& entityManager, registry& registry, const sf::Event::KeyPressed* key, sf::Vector2u windowSize) 
+void Active::Firing::apply(GameService& gameService, registry& registry, const sf::Event::KeyPressed* key, sf::Vector2u windowSize) 
 {
     switch (key->code) 
     {
     case sf::Keyboard::Key::Up:
-        entity_t newProjectile = entityManager.createEntity("PlayerProjectile");
+        entity_t newProjectile = gameService.createSprite("PlayerProjectile");
 
-        sf::Sprite& projectileSprite = entityManager.getSprite(newProjectile);
+        sf::Sprite& projectileSprite = gameService.getSprite(newProjectile);
 
-        float x = entityManager.getSprite(entityManager.getPlayer()).getGlobalBounds().size.x / 2.f + entityManager.getSprite(entityManager.getPlayer()).getGlobalBounds().position.x - projectileSprite.getGlobalBounds().size.x / 2.f;
+        float x = gameService.getSprite(gameService.getPlayer()).getGlobalBounds().size.x / 2.f + gameService.getSprite(gameService.getPlayer()).getGlobalBounds().position.x - projectileSprite.getGlobalBounds().size.x / 2.f;
 
-        float y =  entityManager.getSprite(entityManager.getPlayer()).getGlobalBounds().position.y - projectileSprite.getGlobalBounds().size.y - 1.f; 
+        float y =  gameService.getSprite(gameService.getPlayer()).getGlobalBounds().position.y - projectileSprite.getGlobalBounds().size.y - 1.f; 
 
         projectileSprite.setPosition({x, y});
 

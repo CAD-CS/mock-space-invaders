@@ -13,33 +13,11 @@ class EntityManager
 
 private:
     entity_t m_entities;
-    registry& m_registry;
-
-    int m_Cols;
-
-    std::unordered_map<std::string, sf::Texture> m_textures;
-    std::unordered_map<entity_t, sf::Sprite> m_sprites;
-
-    void init(int windowWidth, int windowHeight);
-
-    void loadTextures();
-    void loadTexture(const std::string& texturePath, const std::string& textureName);
-
-    void createSprite(entity_t entity, std::string textureName);
-
-
 
 public:
-    EntityManager(int  windowWidth, int windowHeight, registry& registry);
-    ~EntityManager();
+    EntityManager();
+    ~EntityManager() = default;
 
-    entity_t createEntity(std::string textureName);
-
-    std::unordered_map<entity_t, sf::Sprite>& getSprites();
-    sf::Sprite& getSprite(entity_t entity);
+    entity_t createEntity();
     entity_t getPlayer();
-
-    void updateEntities();
-
-    void destroyEntity(entity_t entity);
 };

@@ -2,9 +2,10 @@
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
 #include "../managers/EntityManager.hpp"
-#include "../managers/SystemManager.hpp"
 #include "../model/Registry.hpp"
 #include "Initializer.hpp"
+#include "SystemService.hpp"
+#include "GameService.hpp"
 
 class Game 
 {
@@ -15,10 +16,9 @@ private:
 
     sf::RenderWindow m_window;
     sf::Clock m_clock;
-    registry m_registry;
 
-    EntityManager m_entityManager;
-    SystemManager m_systemManager;
+    GameService m_gameService;
+    SystemService m_systemService;
     Initializer m_initializer;
 
     void process();

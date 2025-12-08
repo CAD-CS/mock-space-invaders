@@ -8,10 +8,9 @@ m_isGameOver(false),
 m_isPaused(false),
 m_window(sf::VideoMode({static_cast<unsigned int>(windowWidth), static_cast<unsigned int>(windowHeight)}), title), 
 m_clock(),
-m_registry(),
-m_entityManager(windowWidth, windowHeight, m_registry),
-m_systemManager(m_entityManager, m_registry, m_score, m_isGameOver, m_isPaused),
-m_initializer(m_entityManager, m_registry, windowWidth, windowHeight)
+m_gameService(),
+m_systemService(m_gameService, m_score, m_isGameOver, m_isPaused, m_clock, m_window.getSize()),
+m_initializer(m_gameService, windowWidth, windowHeight)
 {}
 
 void Game::run()
@@ -49,35 +48,35 @@ void Game::process()
 
 void Game::passiveUpdates()
 {
-    m_systemManager.applyPassiveSystems(m_window.getSize(), m_clock, m_score, m_isGameOver);
+    m_systemService.applyPassiveSystems();
 }
 
 void Game::activeUpdates(const sf::Event::KeyPressed* key)
 {
-    m_systemManager.applyActiveSystems(m_window.getSize(), m_isPaused, key);
+    m_systemService.applyActiveSystems(key);
 }
 
 void Game::activeUpdates(const sf::Event::MouseButtonPressed* click)
 {
-    m_systemManager.applyActiveSystems(m_window.getSize(), m_isPaused, click);
+    m_systemService.applyActiveSystems(click);
 }
 
 void Game::render()
 {  
     m_window.clear(sf::Color::Black);
 
-    auto& sprites = m_entityManager.getSprites();
+    auto& sprites = m_gameService.getSprites();
 
     for (const auto& [entity, sprite] : sprites)
     {
-        if (m_registry.entityNames_map[entity] == "Pause" && m_isPaused)
+        if (m_gameService.getRegistry().entityNames_map[entity] == "Pause" && m_isPaused)
         {
             continue;
         }
         m_window.draw(sprite);
     }
 
-    for (const auto& [entity, text] : m_registry.texts_map)
+    for (const auto& [entity, text] : m_gameService.getRegistry().texts_map)
     {
         m_window.draw(text);
     }

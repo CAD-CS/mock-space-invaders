@@ -2,9 +2,10 @@
 #include "../../util/Util.hpp"
 #include <iostream>
 
-void Passive::Physics::apply(EntityManager& entityManager, registry& registry)
+void Passive::Physics::apply(GameService& gameService)
 {
-    for(auto& [entity, sprite] : entityManager.getSprites())
+    registry& registry = gameService.getRegistry();
+    for(auto& [entity, sprite] : gameService.getSprites())
     {
         if(registry.velocities_map.contains(entity))
         {
@@ -14,8 +15,9 @@ void Passive::Physics::apply(EntityManager& entityManager, registry& registry)
     }
 }
 
-void Passive::Collision::apply(EntityManager& entityManager, registry& registry)
+void Passive::Collision::apply(GameService& gameService)
 {
+    registry& registry = gameService.getRegistry();
     std::vector<entity_t> spritesToRemove;
 
     for (auto& hittable1 : registry.hittables_tag)
@@ -26,7 +28,7 @@ void Passive::Collision::apply(EntityManager& entityManager, registry& registry)
             {
                 continue;
             }
-            if (Util::isColliding(entityManager.getSprite(hittable1), entityManager.getSprite(hittable2)))
+            if (Util::isColliding(gameService.getSprite(hittable1), gameService.getSprite(hittable2)))
             {
                 spritesToRemove.push_back(hittable1);
                 spritesToRemove.push_back(hittable2);
@@ -36,17 +38,17 @@ void Passive::Collision::apply(EntityManager& entityManager, registry& registry)
 
     for (auto& spriteEntity : spritesToRemove)
     {
-        entityManager.destroyEntity(spriteEntity);
+        gameService.destroyEntity(spriteEntity);
     }
 }
 
-void Passive::OutOfBounds::apply(EntityManager& entityManager, registry& registry,sf::Vector2u windowSize)
+void Passive::OutOfBounds::apply(GameService& gameService,sf::Vector2u windowSize)
 {
     std::vector<entity_t> spritesToRemove;
-
+    registry& registry = gameService.getRegistry();
     for (auto& projectile : registry.projectiles_tag)
     {
-        if (Util::isOutOfBounds(entityManager.getSprite(projectile), windowSize))
+        if (Util::isOutOfBounds(gameService.getSprite(projectile), windowSize))
         {
             spritesToRemove.push_back(projectile);
         }
@@ -54,21 +56,23 @@ void Passive::OutOfBounds::apply(EntityManager& entityManager, registry& registr
 
     for (auto& spriteEntity : spritesToRemove)
     {
-        entityManager.destroyEntity(spriteEntity);
+        gameService.destroyEntity(spriteEntity);
     }
 }
 
-void Passive::EnemyMovement::apply(EntityManager& entityManager, registry& registry)
+void Passive::EnemyMovement::apply(GameService& gameService)
 {
+    registry& registry = gameService.getRegistry();
     for (auto& enemy : registry.enemies_tag)
     {
-        sf::Sprite& enemySprite = entityManager.getSprite(enemy);
+        sf::Sprite& enemySprite = gameService.getSprite(enemy);
         enemySprite.move({0.f, Util::ENEMY_MOVEMENT_SPEED});
     }
 }
 
-void Passive::EnemyFiring::apply(EntityManager& entityManager, registry& registry, sf::Vector2u windowSize, sf::Clock& clock)
+void Passive::EnemyFiring::apply(GameService& gameService, sf::Vector2u windowSize, sf::Clock& clock)
 {
+    registry& registry = gameService.getRegistry();
     if (clock.getElapsedTime().asSeconds() < 1.f)
     {
         return;
@@ -76,13 +80,13 @@ void Passive::EnemyFiring::apply(EntityManager& entityManager, registry& registr
 
     for (auto& [col, enemy] : registry.lowestEnemies_map)
     {
-        entity_t newProjectile = entityManager.createEntity("EnemyProjectile");
+        entity_t newProjectile = gameService.createSprite("EnemyProjectile");
 
-        sf::Sprite& projectileSprite = entityManager.getSprite(newProjectile);
+        sf::Sprite& projectileSprite = gameService.getSprite(newProjectile);
 
-        float x = entityManager.getSprite(enemy).getGlobalBounds().size.x / 2.f + entityManager.getSprite(enemy).getGlobalBounds().position.x - projectileSprite.getGlobalBounds().size.x / 2.f;
+        float x = gameService.getSprite(enemy).getGlobalBounds().size.x / 2.f + gameService.getSprite(enemy).getGlobalBounds().position.x - projectileSprite.getGlobalBounds().size.x / 2.f;
 
-        float y =  entityManager.getSprite(enemy).getGlobalBounds().position.y + entityManager.getSprite(enemy).getGlobalBounds().size.y + 1.f; 
+        float y =  gameService.getSprite(enemy).getGlobalBounds().position.y + gameService.getSprite(enemy).getGlobalBounds().size.y + 1.f; 
 
         projectileSprite.setPosition({x, y});
 
@@ -94,16 +98,17 @@ void Passive::EnemyFiring::apply(EntityManager& entityManager, registry& registr
 }
 
 
-void Passive::Scoring::apply(EntityManager& entityManager, registry& registry, int& score)
+void Passive::Scoring::apply(GameService& gameService, int& score)
 {
     int pointsPerHit = 10;
     int hits = 0;
 
+    registry& registry = gameService.getRegistry();
     for (auto& projectile : registry.projectiles_tag)
     {
         for (auto& enemy : registry.enemies_tag)
         {
-            if (Util::isColliding(entityManager.getSprite(projectile), entityManager.getSprite(enemy)))
+            if (Util::isColliding(gameService.getSprite(projectile), gameService.getSprite(enemy)))
             {
                 hits++;
             }
@@ -113,16 +118,17 @@ void Passive::Scoring::apply(EntityManager& entityManager, registry& registry, i
     score += hits * pointsPerHit;
 }
 
-void Passive::GameOverCheck::apply(EntityManager& entityManager, registry& registry, bool& isGameOver)
+void Passive::GameOverCheck::apply(GameService& gameService, bool& isGameOver)
 {
+    registry& registry = gameService.getRegistry();
     for (auto& environment : registry.environment_tag)
     {
         if (registry.entityNames_map[environment] == "GameOverMarker")
         {
-            sf::Sprite& gameOverMarker = entityManager.getSprite(environment);
+            sf::Sprite& gameOverMarker = gameService.getSprite(environment);
             for (auto& enemy : registry.enemies_tag)
             {
-                sf::Sprite& enemySprite = entityManager.getSprite(enemy);
+                sf::Sprite& enemySprite = gameService.getSprite(enemy);
                 if (Util::isColliding(enemySprite, gameOverMarker))
                 {
                     isGameOver = true;

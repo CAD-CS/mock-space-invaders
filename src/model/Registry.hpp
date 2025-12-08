@@ -16,4 +16,5 @@ struct registry
     std::vector<entity_t> enemies_tag;
     std::vector<entity_t> hittables_tag;
     std::vector<entity_t> environment_tag;
+    std::vector<entity_t> rendable_tag;
 };

@@ -2,13 +2,11 @@
 #include "../util/Util.hpp"
 #include <iostream>
 
-Initializer::Initializer(EntityManager& entityManager, registry& registry, int windowWidth, int windowHeight) 
+Initializer::Initializer(GameService& GameService, int windowWidth, int windowHeight) 
 : 
-m_entityManager(entityManager), 
-m_registry(registry),
-m_font("./assets/BOOKOS.TTF"),
-m_scoreBoardLabel(m_font, "SCORE", 12)
-{
+gameService(GameService),
+m_registry(gameService.getRegistry())
+    {
     initializePlayer(windowWidth, windowHeight);
     initializeEnemies();
     initializeBlocks();
@@ -18,8 +16,8 @@ m_scoreBoardLabel(m_font, "SCORE", 12)
 
 void Initializer::initializePlayer(int windowWidth, int windowHeight)
 {
-    entity_t player = m_entityManager.createEntity("Player");
-    sf::Sprite& sprite = m_entityManager.getSprite(player);
+    entity_t player = gameService.createSprite("Player");
+    sf::Sprite& sprite = gameService.getSprite(player);
     float x = (windowWidth - sprite.getLocalBounds().size.x) / 2.f;
     float y = windowHeight - sprite.getLocalBounds().size.y;
 
@@ -42,9 +40,8 @@ void Initializer::initializeEnemies()
     {
         for (int col = 0; col < cols; ++col)
         {
-            entity_t enemy = m_entityManager.createEntity
-            ("Enemy");
-            sf::Sprite& sprite = m_entityManager.getSprite(enemy);
+            entity_t enemy = gameService.createSprite("Enemy");
+            sf::Sprite& sprite = gameService.getSprite(enemy);
             float x = startX + col * (sprite.getLocalBounds().size.x + spacingX);
             float y = startY + row * (sprite.getLocalBounds().size.y + spacingY);
             initPosition(enemy, x, y);
@@ -55,7 +52,7 @@ void Initializer::initializeEnemies()
         }
     }
 
-    m_entityManager.updateEntities();
+    gameService.updateEntities();
 }
 
 void Initializer::initializeBlocks()
@@ -65,8 +62,8 @@ void Initializer::initializeBlocks()
 
     for (int i = 0; i < numBlocks; ++i)
     {
-        entity_t block = m_entityManager.createEntity("Block");
-        sf::Sprite& sprite = m_entityManager.getSprite(block);
+        entity_t block = gameService.createSprite("Block");
+        sf::Sprite& sprite = gameService.getSprite(block);
         float x = spacing + i * (sprite.getLocalBounds().size.x + spacing);
         float y = 600.f;
         initPosition(block, x, y);
@@ -79,8 +76,8 @@ void Initializer::initializeBlocks()
 void Initializer::initializeEnvironmentEntities(int windowWidth, int windowHeight)
 {
     {
-        entity_t gameOverMarker = m_entityManager.createEntity("GameOverMarker");
-        sf::Sprite& sprite = m_entityManager.getSprite(gameOverMarker);
+        entity_t gameOverMarker = gameService.createSprite("GameOverMarker");
+        sf::Sprite& sprite = gameService.getSprite(gameOverMarker);
         float x = 0.f;
         float y = 900.f;
         initPosition(gameOverMarker, x, y);
@@ -88,8 +85,8 @@ void Initializer::initializeEnvironmentEntities(int windowWidth, int windowHeigh
     }
 
     {
-        entity_t pauseButton = m_entityManager.createEntity("Pause");
-        sf::Sprite& pauseSprite = m_entityManager.getSprite(pauseButton);
+        entity_t pauseButton = gameService.createSprite("Pause");
+        sf::Sprite& pauseSprite = gameService.getSprite(pauseButton);
         float x = windowWidth - pauseSprite.getLocalBounds().size.x - 10.f;
         float y = 10.f;
         initPosition(pauseButton, x, y);
@@ -97,8 +94,8 @@ void Initializer::initializeEnvironmentEntities(int windowWidth, int windowHeigh
     }
 
     {
-        entity_t unpauseButton = m_entityManager.createEntity("Unpause");
-        sf::Sprite& unpauseSprite = m_entityManager.getSprite(unpauseButton);
+        entity_t unpauseButton = gameService.createSprite("Unpause");
+        sf::Sprite& unpauseSprite = gameService.getSprite(unpauseButton);
         float x = windowWidth - unpauseSprite.getLocalBounds().size.x - 10.f;
         float y = 10.f;
         initPosition(unpauseButton, x, y);
@@ -108,26 +105,21 @@ void Initializer::initializeEnvironmentEntities(int windowWidth, int windowHeigh
 
 void Initializer::initializeScoreBoard()
 {
-    entity_t scoreBoard = m_entityManager.createEntity("ScoreBoard");
-    sf::Sprite& sprite = m_entityManager.getSprite(scoreBoard);
+    entity_t scoreBoard = gameService.createSprite("ScoreBoard");
+    sf::Sprite& sprite = gameService.getSprite(scoreBoard);
     float x = 10.f;
     float y = 10.f;
     initPosition(scoreBoard, x, y);
     m_registry.environment_tag.push_back(scoreBoard);
 
-    m_scoreBoardLabel.setPosition({x + 15.f, y + 10.f});
-    m_scoreBoardLabel.setFillColor(sf::Color::Black);
-    m_scoreBoardLabel.setStyle(sf::Text::Bold);
-    m_registry.texts_map.insert({scoreBoard, m_scoreBoardLabel});
+    gameService.createText("Score: 0", "ScoreLabel", {x + 15.f, y + 10.f});
+    sf::Text& scoreBoardLabel = gameService.getText("ScoreLabel");
 }
 
 void Initializer::initPosition(entity_t entity, float x, float y)
 {
-    if(m_entityManager.getSprites().contains(entity))
-    {
-        sf::Sprite& sprite = m_entityManager.getSprite(entity);
-        sprite.setPosition({x,y});
-    }
+    sf::Sprite& sprite = gameService.getSprite(entity);
+    sprite.setPosition({x,y});
 }
 
 void Initializer::initVelocity(entity_t entity)

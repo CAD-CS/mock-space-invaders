@@ -5,146 +5,17 @@
 #include <iostream>
 #include <filesystem>
 
-EntityManager::EntityManager(int windowWidth, int windowHeight, registry& registry)
-: m_entities(0), m_registry(registry)
-{
-    m_textures.reserve(MAX_ENTITIES);
-    init(windowWidth, windowHeight);
-}
+EntityManager::EntityManager()
+: m_entities(0)
+{}
 
-EntityManager::~EntityManager() 
-{
-    m_textures.clear();
-    m_sprites.clear();
-}
-
-void EntityManager::init(int windowWidth, int windowHeight)
-{
-    loadTextures();
-    updateEntities();
-}
-
-void EntityManager::loadTextures()
-{
-    loadTexture("./assets/player.jpg", "Player");
-    loadTexture("./assets/enemy.jpg", "Enemy");
-    loadTexture("./assets/block.jpg", "Block");
-    loadTexture("./assets/player_projectile.jpg", "PlayerProjectile");
-    loadTexture("./assets/enemy_projectile.jpg", "EnemyProjectile");
-    loadTexture("./assets/game_over_mark.jpg", "GameOverMarker");
-    loadTexture("./assets/pause.jpg", "Pause");
-    loadTexture("./assets/unpause.jpg", "Unpause");
-    loadTexture("./assets/scoreboard.jpg", "ScoreBoard");
-}
-
-void EntityManager::loadTexture(const std::string& texturePath, const std::string& textureName)
-{
-    sf::Texture texture;
-    if (!texture.loadFromFile(texturePath))
-    {
-        throw std::runtime_error("Failed to load texture from path: " + texturePath);
-    }
-    m_textures.insert({textureName, texture});
-}
-
-void EntityManager::createSprite(entity_t entity, std::string textureName)
-{
-    assert(m_textures.contains(textureName) && "Texture not found in texture map.");
-
-    m_sprites.try_emplace(entity, m_textures.at(textureName));
-}
-
-void EntityManager::updateEntities()
-{
-    std::unordered_map<int, entity_t> lowestEnemies;
-    for (int col = 0; col < Util::COLUMNS; ++col)
-    {
-        for (const auto& enemy : m_registry.enemies_tag)
-        {
-            if (m_registry.enemyPositions_map[enemy].col == col)
-            {
-                if (!lowestEnemies.contains(col))
-                {
-                    lowestEnemies[col] = enemy;
-                }
-                if (m_registry.enemyPositions_map[enemy].row > m_registry.enemyPositions_map[lowestEnemies[col]].row)
-                {
-                    lowestEnemies[col] = enemy;
-                }    
-            }
-        }
-    }
-
-    m_registry.lowestEnemies_map = lowestEnemies;
-}
-
-entity_t EntityManager::createEntity(std::string textureName)
+entity_t EntityManager::createEntity()
 {
     assert(m_entities < MAX_ENTITIES && "Too many entities in existence.");
 
     entity_t newEntity = ++m_entities;
 
-    createSprite(newEntity, textureName);
-    m_registry.entityNames_map.insert({newEntity, textureName });
-    
     return newEntity;
 }
 
-std::unordered_map<entity_t, sf::Sprite>& EntityManager::getSprites() { return m_sprites; }
-
-sf::Sprite& EntityManager::getSprite(entity_t entity)
-{
-    assert(m_sprites.contains(entity) && "Entity does not have a sprite component.");
-    return m_sprites.at(entity);
-}
-
 entity_t EntityManager::getPlayer() { return 1; }
-
-template<typename T>
-void deleteFromMapping(std::unordered_map<entity_t, T>& mapping, entity_t entity)
-{
-    if (mapping.contains(entity))
-    {
-        mapping.erase(entity);
-    }
-}
-
-void deleteFromVector(std::vector<entity_t>& vec, entity_t entity)
-{
-    auto position = std::find(vec.begin(), vec.end(), entity);
-    if (position != vec.end())
-    {
-        vec.erase(position);
-    }
-}
-
-void deleteFromLowestEnemiesMappping(std::unordered_map<int, entity_t>& mapping, entity_t entity)
-{
-    for (auto it = mapping.begin(); it != mapping.end(); )
-    {
-        if (it->second == entity)
-        {
-            it = mapping.erase(it);
-        }
-        else
-        {
-            ++it;
-        }
-    }
-}
-
-void EntityManager::destroyEntity(entity_t entity)
-{
-    deleteFromMapping(m_sprites, entity);
-    
-    deleteFromMapping(m_registry.entityNames_map, entity);
-    deleteFromMapping(m_registry.velocities_map, entity);
-    deleteFromMapping(m_registry.enemyPositions_map, entity);
-    deleteFromLowestEnemiesMappping(m_registry.lowestEnemies_map, entity);
-
-    deleteFromVector(m_registry.hittables_tag, entity);
-    deleteFromVector(m_registry.projectiles_tag, entity);
-    deleteFromVector(m_registry.enemies_tag, entity);
-
-    updateEntities();
-}

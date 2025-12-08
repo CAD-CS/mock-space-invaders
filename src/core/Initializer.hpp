@@ -2,15 +2,14 @@
 
 #include "../managers/EntityManager.hpp"
 #include "../model/Registry.hpp"
+#include "GameService.hpp"
 
 class Initializer
 {
 private:
-    EntityManager& m_entityManager;
+    GameService& gameService;
     registry& m_registry;
-    sf::Font m_font;
-    sf::Text m_scoreBoardLabel;
-    
+
     void initializePlayer(int windowWidth, int windowHeight);
     void initializeEnemies();
     void initializeBlocks();
@@ -19,6 +18,6 @@ private:
     void initPosition(entity_t entity, float x, float y);
     void initVelocity(entity_t entity);
 public:
-    Initializer(EntityManager& entityManager, registry& registry, int windowWidth, int windowHeight);
+    Initializer(GameService& gameService, int windowWidth, int windowHeight);
     
 };
