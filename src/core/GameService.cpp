@@ -1,5 +1,4 @@
 #include "GameService.hpp"
-#include "../util/Util.hpp"
 
 GameService::GameService()
 :
@@ -23,22 +22,6 @@ entity_t GameService::createSprite(std::string textureName, sf::Vector2f positio
 void GameService::createText(std::string initialText, std::string textKey, sf::Vector2f position)
 {
    m_textManager.createText(initialText, textKey, position); 
-}
-
-void GameService::destroyEntity(entity_t entity)
-{
-    deleteFromMapping(m_spriteManager.getSprites(), entity);
-    
-    deleteFromMapping(m_registry.entityNames_map, entity);
-    deleteFromMapping(m_registry.velocities_map, entity);
-    deleteFromMapping(m_registry.enemyPositions_map, entity);
-    deleteFromLowestEnemiesMappping(m_registry.lowestEnemies_map, entity);
-
-    deleteFromVector(m_registry.hittables_tag, entity);
-    deleteFromVector(m_registry.projectiles_tag, entity);
-    deleteFromVector(m_registry.enemies_tag, entity);
-
-    updateEntities();
 }
 
 sf::Sprite& GameService::getSprite(entity_t entity)
@@ -125,4 +108,20 @@ void GameService::updateEntities()
 entity_t GameService::getPlayer()
 {
     return m_entityManager.getPlayer();
+}
+
+void GameService::destroyEntity(entity_t entity)
+{
+    deleteFromMapping(m_spriteManager.getSprites(), entity);
+    
+    deleteFromMapping(m_registry.entityNames_map, entity);
+    deleteFromMapping(m_registry.velocities_map, entity);
+    deleteFromMapping(m_registry.enemyPositions_map, entity);
+    deleteFromLowestEnemiesMappping(m_registry.lowestEnemies_map, entity);
+
+    deleteFromVector(m_registry.hittables_tag, entity);
+    deleteFromVector(m_registry.projectiles_tag, entity);
+    deleteFromVector(m_registry.enemies_tag, entity);
+
+    updateEntities();
 }

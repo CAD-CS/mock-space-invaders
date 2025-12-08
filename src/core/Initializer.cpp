@@ -1,6 +1,4 @@
 #include "Initializer.hpp"
-#include "../util/Util.hpp"
-#include <iostream>
 
 Initializer::Initializer(GameService& GameService, int windowWidth, int windowHeight) 
 : 

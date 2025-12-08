@@ -26,8 +26,9 @@ void Active::Movement::apply(GameService& gameService, const sf::Event::KeyPress
     }
 }
 
-void Active::Firing::apply(GameService& gameService, registry& registry, const sf::Event::KeyPressed* key, sf::Vector2u windowSize) 
+void Active::Firing::apply(GameService& gameService, const sf::Event::KeyPressed* key, sf::Vector2u windowSize) 
 {
+    registry& registry = gameService.getRegistry();
     switch (key->code) 
     {
     case sf::Keyboard::Key::Up:

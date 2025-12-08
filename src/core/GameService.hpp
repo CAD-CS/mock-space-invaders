@@ -5,6 +5,7 @@
 #include "../managers/TextManager.hpp"
 #include "../managers/TextureManager.hpp"
 #include "../model/Registry.hpp"
+#include "../util/Util.hpp"
 
 class GameService
 {

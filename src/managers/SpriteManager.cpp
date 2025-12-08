@@ -1,6 +1,6 @@
 #include "SpriteManager.hpp"
 
-sf::Sprite& SpriteManager::createSprite(entity_t entity, sf::Texture texture)
+sf::Sprite& SpriteManager::createSprite(entity_t entity, sf::Texture& texture)
 {
 
     sf::Sprite sprite(texture);

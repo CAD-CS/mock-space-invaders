@@ -1,8 +1,9 @@
 #pragma once
 
-#include "../managers/EntityManager.hpp"
-#include "../model/Registry.hpp"
+#include <iostream>
 #include "GameService.hpp"
+#include "../model/Registry.hpp"
+#include "../util/Util.hpp"
 
 class Initializer
 {

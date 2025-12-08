@@ -5,7 +5,6 @@
 #include <string>
 #include "../model/Components.hpp"
 #include "../model/Registry.hpp"
-#include "../managers/EntityManager.hpp"
 
 class TextManager
 {

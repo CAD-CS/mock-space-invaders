@@ -1,8 +1,7 @@
 #pragma once
 
-#include "../../managers/EntityManager.hpp"
-#include "../../model/Registry.hpp"
 #include <SFML/Graphics.hpp>
+#include "../../model/Registry.hpp"
 #include "../../core/GameService.hpp"
 
 namespace Active

@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
-#include "../managers/EntityManager.hpp"
+
 #include "../model/Registry.hpp"
 #include "Initializer.hpp"
 #include "SystemService.hpp"

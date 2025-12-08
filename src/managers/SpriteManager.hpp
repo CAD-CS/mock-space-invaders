@@ -13,7 +13,7 @@ public:
     SpriteManager() = default;
     ~SpriteManager() = default;
 
-    sf::Sprite& createSprite(entity_t entity, sf::Texture texture);
+    sf::Sprite& createSprite(entity_t entity, sf::Texture& texture);
 
     sf::Sprite& getSprite(entity_t entity);
     std::unordered_map<entity_t, sf::Sprite>& getSprites();

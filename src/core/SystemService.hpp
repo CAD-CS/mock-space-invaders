@@ -1,6 +1,5 @@
 # pragma once
 
-#include "EntityManager.hpp"
 #include "../model/Registry.hpp"
 #include "../model/Components.hpp"
 #include "GameService.hpp"
