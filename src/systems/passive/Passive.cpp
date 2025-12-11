@@ -122,6 +122,7 @@ void Passive::Scoring::apply(GameService& gameService, int& score)
     }
 
     score += hits * pointsPerHit;
+    gameService.getText("ScoreValue").setString(std::to_string(score));
 }
 
 void Passive::GameOverCheck::apply(GameService& gameService, bool& isGameOver)

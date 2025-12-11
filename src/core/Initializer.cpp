@@ -56,14 +56,14 @@ void Initializer::initializeEnemies()
 void Initializer::initializeBlocks()
 {
     const int numBlocks = 9;
-    const float spacing = 50.f;
+    const float spacing = 100.f;
 
     for (int i = 0; i < numBlocks; ++i)
     {
         entity_t block = gameService.createSprite("Block");
         sf::Sprite& sprite = gameService.getSprite(block);
-        float x = spacing + i * (sprite.getLocalBounds().size.x + spacing);
-        float y = 600.f;
+        float x = 50 + spacing + i * (sprite.getLocalBounds().size.x + spacing);
+        float y = 800.f;
         initPosition(block, x, y);
         initVelocity(block);
         m_registry.hittables_tag.push_back(block);
@@ -109,8 +109,12 @@ void Initializer::initializeScoreBoard()
     initPosition(scoreBoard, x, y);
     m_registry.environment_tag.push_back(scoreBoard);
 
-    gameService.createText("Score: 0", "ScoreLabel", {x + 15.f, y + 10.f});
+    gameService.createText("SCORE", "ScoreLabel", {x + 15.f, y + 10.f});
     sf::Text& scoreBoardLabel = gameService.getText("ScoreLabel");
+
+    gameService.createText("0", "ScoreValue", {x + 30.f, y + 50.f});
+    sf::Text& scoreValueText = gameService.getText("ScoreValue");
+    scoreValueText.setCharacterSize(16);
 }
 
 void Initializer::initPosition(entity_t entity, float x, float y)

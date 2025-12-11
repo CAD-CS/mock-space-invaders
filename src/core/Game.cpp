@@ -87,9 +87,10 @@ void Game::render()
         m_window.draw(sprite);
     }
 
-    for (const auto& [entity, text] : m_gameService.getRegistry().texts_map)
+    auto& texts = m_gameService.getTexts();
+
+    for (const auto& [entity, text] : texts)
     {
-        std::cout << "Drawing text: " << text.getString().toAnsiString() << std::endl;
         m_window.draw(text);
     }
 
