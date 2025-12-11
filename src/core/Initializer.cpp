@@ -27,12 +27,12 @@ void Initializer::initializePlayer(int windowWidth, int windowHeight)
 
 void Initializer::initializeEnemies()
 {
-    const int rows = 2;
+    const int rows = 4;
     const int cols = Util::COLUMNS;
     const float spacingX = 20.f;
     const float spacingY = 20.f;
-    const float startX = 50.f;
-    const float startY = 50.f;
+    const float startX = 180.f;
+    const float startY = 150.f;
 
     for (int row = 0; row < rows; ++row)
     {
@@ -68,7 +68,6 @@ void Initializer::initializeBlocks()
         initVelocity(block);
         m_registry.hittables_tag.push_back(block);
     }
-
 }
 
 void Initializer::initializeEnvironmentEntities(int windowWidth, int windowHeight)

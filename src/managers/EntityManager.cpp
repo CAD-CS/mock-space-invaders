@@ -19,3 +19,15 @@ entity_t EntityManager::createEntity()
 }
 
 entity_t EntityManager::getPlayer() { return 1; }
+
+void EntityManager::decreaseEntityCount()
+{
+    if (m_entities == 0)
+    {
+        return;
+    }
+
+    assert(m_entities > 0 && "No entities to destroy.");
+
+    --m_entities;
+}

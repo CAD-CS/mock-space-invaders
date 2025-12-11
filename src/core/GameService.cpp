@@ -13,6 +13,7 @@ entity_t GameService::createSprite(std::string textureName, sf::Vector2f positio
 {
     assert(m_textureManager.getTextures().contains(textureName) && "Texture not found in texture map.");
     entity_t newEntity = m_entityManager.createEntity();
+    m_registry.entityNames_map[newEntity] = textureName;
     sf::Sprite& newSprite = m_spriteManager.createSprite(newEntity, m_textureManager.getTexture(textureName));
     newSprite.setPosition(position);
     m_registry.rendable_tag.push_back(newEntity);
@@ -124,4 +125,6 @@ void GameService::destroyEntity(entity_t entity)
     deleteFromVector(m_registry.enemies_tag, entity);
 
     updateEntities();
+
+    m_entityManager.decreaseEntityCount();
 }

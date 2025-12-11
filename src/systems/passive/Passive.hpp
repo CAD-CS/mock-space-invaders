@@ -26,7 +26,7 @@ namespace Passive
     class EnemyMovement
     {
     public:
-        static void apply(GameService& gameService);
+        static void apply(GameService& gameService, sf::Clock& clock);
     };
 
     class EnemyFiring

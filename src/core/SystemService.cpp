@@ -24,7 +24,7 @@ void SystemService::applyPassiveSystems()
     Passive::Scoring::apply(m_gameService, m_score);
     Passive::Collision::apply(m_gameService);
     Passive::OutOfBounds::apply(m_gameService, m_windowSize);
-    Passive::EnemyMovement::apply(m_gameService);
+    Passive::EnemyMovement::apply(m_gameService, m_clock);
     //Passive::EnemyFiring::apply(m_gameService, m_windowSize, m_clock);
     Passive::GameOverCheck::apply(m_gameService, m_isGameOver);
 }

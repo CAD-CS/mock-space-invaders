@@ -6,7 +6,7 @@
 #include "../model/Components.hpp"
 #include "../model/Registry.hpp"
 
-constexpr entity_t MAX_ENTITIES = 100;
+constexpr entity_t MAX_ENTITIES = 500;
 
 class EntityManager
 {
@@ -20,4 +20,5 @@ public:
 
     entity_t createEntity();
     entity_t getPlayer();
+    void decreaseEntityCount();
 };

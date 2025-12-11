@@ -69,15 +69,27 @@ void Game::render()
 
     for (const auto& [entity, sprite] : sprites)
     {
-        if (m_gameService.getRegistry().entityNames_map[entity] == "Pause" && m_isPaused)
+        if (m_isPaused)
         {
+            if (m_gameService.getRegistry().entityNames_map[entity] == "Pause")
+            {
             continue;
+            }
         }
+        if (!m_isPaused)
+        {
+            if (m_gameService.getRegistry().entityNames_map[entity] == "Unpause")
+            {
+            continue;
+            }
+        }
+
         m_window.draw(sprite);
     }
 
     for (const auto& [entity, text] : m_gameService.getRegistry().texts_map)
     {
+        std::cout << "Drawing text: " << text.getString().toAnsiString() << std::endl;
         m_window.draw(text);
     }
 

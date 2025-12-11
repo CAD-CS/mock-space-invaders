@@ -60,14 +60,20 @@ void Passive::OutOfBounds::apply(GameService& gameService,sf::Vector2u windowSiz
     }
 }
 
-void Passive::EnemyMovement::apply(GameService& gameService)
+void Passive::EnemyMovement::apply(GameService& gameService, sf::Clock& clock)
 {
+    if (clock.getElapsedTime().asSeconds() < 2)
+    {
+        return;
+    }
+
     registry& registry = gameService.getRegistry();
     for (auto& enemy : registry.enemies_tag)
     {
         sf::Sprite& enemySprite = gameService.getSprite(enemy);
         enemySprite.move({0.f, Util::ENEMY_MOVEMENT_SPEED});
     }
+    clock.restart();
 }
 
 void Passive::EnemyFiring::apply(GameService& gameService, sf::Vector2u windowSize, sf::Clock& clock)
