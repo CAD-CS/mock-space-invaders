@@ -62,7 +62,7 @@ void Passive::OutOfBounds::apply(GameService& gameService,sf::Vector2u windowSiz
 
 void Passive::EnemyMovement::apply(GameService& gameService, sf::Clock& clock)
 {
-    if (clock.getElapsedTime().asSeconds() < 2)
+    if (clock.getElapsedTime().asSeconds() < 6.f)
     {
         return;
     }
@@ -73,19 +73,23 @@ void Passive::EnemyMovement::apply(GameService& gameService, sf::Clock& clock)
         sf::Sprite& enemySprite = gameService.getSprite(enemy);
         enemySprite.move({0.f, Util::ENEMY_MOVEMENT_SPEED});
     }
-    clock.restart();
 }
 
 void Passive::EnemyFiring::apply(GameService& gameService, sf::Vector2u windowSize, sf::Clock& clock)
 {
     registry& registry = gameService.getRegistry();
-    if (clock.getElapsedTime().asSeconds() < 1.f)
+    if (clock.getElapsedTime().asSeconds() < 6.f)
     {
         return;
     }
 
     for (auto& [col, enemy] : registry.lowestEnemies_map)
     {
+        if ( (std::rand() % 100) < 75)
+        {
+            continue;
+        }
+
         entity_t newProjectile = gameService.createSprite("EnemyProjectile");
 
         sf::Sprite& projectileSprite = gameService.getSprite(newProjectile);
@@ -98,7 +102,7 @@ void Passive::EnemyFiring::apply(GameService& gameService, sf::Vector2u windowSi
 
         registry.projectiles_tag.push_back(newProjectile);
         registry.hittables_tag.push_back(newProjectile);
-        registry.velocities_map.insert({newProjectile, {0.f, 1.f}});
+        registry.velocities_map.insert({newProjectile, {0.f, 4.f}});
     }
     clock.restart();
 }

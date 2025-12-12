@@ -24,8 +24,6 @@ entity_t GameService::createSprite(std::string textureName, sf::Vector2f positio
 void GameService::createText(std::string initialText, std::string textKey, sf::Vector2f position)
 {
    sf::Text& newText = m_textManager.createText(initialText, textKey, position); 
-   std::cout << m_textManager.getTexts().size() << std::endl;
-   std::cout << newText.getString().toAnsiString() << std::endl;
 }
 
 sf::Sprite& GameService::getSprite(entity_t entity)

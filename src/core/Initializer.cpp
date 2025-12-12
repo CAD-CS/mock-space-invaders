@@ -60,13 +60,20 @@ void Initializer::initializeBlocks()
 
     for (int i = 0; i < numBlocks; ++i)
     {
-        entity_t block = gameService.createSprite("Block");
-        sf::Sprite& sprite = gameService.getSprite(block);
-        float x = 50 + spacing + i * (sprite.getLocalBounds().size.x + spacing);
-        float y = 800.f;
-        initPosition(block, x, y);
-        initVelocity(block);
-        m_registry.hittables_tag.push_back(block);
+        entity_t block1 = gameService.createSprite("Block");
+        sf::Sprite& sprite1 = gameService.getSprite(block1);
+        float x1 = 50 + spacing + i * (sprite1.getLocalBounds().size.x + spacing);
+        initPosition(block1, x1, 800.f);
+        initVelocity(block1);
+        m_registry.hittables_tag.push_back(block1);
+
+        entity_t block2 = gameService.createSprite("Block");
+        sf::Sprite& sprite2 = gameService.getSprite(block2);
+        float x2 = 50 + spacing + i * (sprite2.getLocalBounds().size.x + spacing);
+        float y2 = 800 - sprite2.getLocalBounds().size.y - 5;
+        initPosition(block2, x2, y2);
+        initVelocity(block2);
+        m_registry.hittables_tag.push_back(block2);
     }
 }
 
