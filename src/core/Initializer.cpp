@@ -51,6 +51,7 @@ void Initializer::initializeEnemies()
     }
 
     gameService.updateEntities();
+    std::cout << "Initialized " << m_registry.enemies_tag.size() << " enemies.\n";
 }
 
 void Initializer::initializeBlocks()

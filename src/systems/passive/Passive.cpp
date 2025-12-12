@@ -132,6 +132,19 @@ void Passive::Scoring::apply(GameService& gameService, int& score)
 void Passive::GameOverCheck::apply(GameService& gameService, bool& isGameOver)
 {
     registry& registry = gameService.getRegistry();
+
+    if (!gameService.getSprites().contains(gameService.getPlayer()))
+    {
+        isGameOver = true;
+        return;
+    }
+
+    if (registry.enemies_tag.empty())
+    {
+        isGameOver = true;
+        return;
+    }
+
     for (auto& environment : registry.environment_tag)
     {
         if (registry.entityNames_map[environment] == "GameOverMarker")
