@@ -1,8 +1,8 @@
 #pragma once
 
-#include <unordered_map>
-#include <SFML/Graphics.hpp>
 #include "Components.hpp"
+#include <SFML/Graphics.hpp>
+#include <unordered_map>
 
 struct registry
 {

@@ -2,7 +2,6 @@
 
 #include <SFML/Graphics.hpp>
 #include "../model/Components.hpp"
-#include "../model/Registry.hpp"
 
 class SpriteManager
 {

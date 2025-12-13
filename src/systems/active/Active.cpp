@@ -1,6 +1,7 @@
 #include "Active.hpp"
+
 #include "../../util/Util.hpp"
-#include <iostream>
+#include "../../util/Constants.hpp"
 
 void Active::Movement::apply(GameService& gameService, const sf::Event::KeyPressed* key, sf::Vector2u windowSize) 
 {
@@ -13,7 +14,7 @@ void Active::Movement::apply(GameService& gameService, const sf::Event::KeyPress
             playerSprite.setPosition({0.f, playerSprite.getPosition().y});
             return;
         }
-        playerSprite.move({-Util::PLAYER_MOVEMENT_SPEED, 0.f});
+        playerSprite.move({-Constants::PLAYER_MOVEMENT_SPEED, 0.f});
         return;
     case sf::Keyboard::Key::Right:
         if(!Util::isWithinWindow(playerSprite, windowSize, sf::Keyboard::Key::Right))
@@ -21,7 +22,7 @@ void Active::Movement::apply(GameService& gameService, const sf::Event::KeyPress
             playerSprite.setPosition({static_cast<float>(windowSize.x - playerSprite.getTexture().getSize().x), playerSprite.getPosition().y});
             return;
         }
-        playerSprite.move({Util::PLAYER_MOVEMENT_SPEED, 0.f});
+        playerSprite.move({Constants::PLAYER_MOVEMENT_SPEED, 0.f});
         return;
     }
 }
@@ -44,21 +45,21 @@ void Active::Firing::apply(GameService& gameService, const sf::Event::KeyPressed
 
         registry.projectiles_tag.push_back(newProjectile);
         registry.hittables_tag.push_back(newProjectile);
-        registry.velocities_map.insert({newProjectile, {0.f, -Util::PROJECTILE_MOVEMENT_SPEED}});
+        registry.velocities_map.insert({newProjectile, {0.f, -Constants::PROJECTILE_MOVEMENT_SPEED}});
 
         return;
     }
 }
 
 
-void Active::Pause::apply(sf::Vector2u windowSize, bool& isPaused, const sf::Event::KeyPressed* key)
+void Active::Pause::apply(const sf::Event::KeyPressed* key, sf::Vector2u windowSize, bool& isPaused)
 {
     if (key->code == sf::Keyboard::Key::P)
     {
         isPaused = !isPaused;
     }
 }
-void Active::Pause::apply(sf::Vector2u windowSize, bool& isPaused, const sf::Event::MouseButtonPressed* click)
+void Active::Pause::apply(const sf::Event::MouseButtonPressed* click, sf::Vector2u windowSize, bool& isPaused)
 {
     auto isClickInsideButton = [windowSize, click]() {
         int xClick = click->position.x;

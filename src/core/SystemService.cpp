@@ -1,7 +1,6 @@
 #include "SystemService.hpp"
 #include "../systems/passive/Passive.hpp"
 #include "../systems/active/Active.hpp"
-#include <iostream>
 
 SystemService::SystemService(GameService& gameService, int& score, bool& isGameOver, bool& isPaused, sf::Clock& clock, sf::Vector2u windowSize)
 : 
@@ -31,7 +30,7 @@ void SystemService::applyPassiveSystems()
 
 void SystemService::applyActiveSystems(const sf::Event::KeyPressed* key)
 {
-    Active::Pause::apply(m_windowSize, m_isPaused, key);
+    Active::Pause::apply(key, m_windowSize, m_isPaused);
     if (m_isPaused)
     {
         return;
@@ -42,5 +41,5 @@ void SystemService::applyActiveSystems(const sf::Event::KeyPressed* key)
 
 void SystemService::applyActiveSystems(const sf::Event::MouseButtonPressed* click)
 {
-    Active::Pause::apply(m_windowSize, m_isPaused, click);
+    Active::Pause::apply(click, m_windowSize, m_isPaused);
 }

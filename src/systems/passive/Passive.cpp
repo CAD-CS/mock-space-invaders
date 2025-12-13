@@ -1,6 +1,6 @@
 #include "Passive.hpp"
 #include "../../util/Util.hpp"
-#include <iostream>
+#include "../../util/Constants.hpp"
 
 void Passive::Physics::apply(GameService& gameService)
 {
@@ -71,7 +71,7 @@ void Passive::EnemyMovement::apply(GameService& gameService, sf::Clock& clock)
     for (auto& enemy : registry.enemies_tag)
     {
         sf::Sprite& enemySprite = gameService.getSprite(enemy);
-        enemySprite.move({0.f, Util::ENEMY_MOVEMENT_SPEED});
+        enemySprite.move({0.f, Constants::ENEMY_MOVEMENT_SPEED});
     }
 }
 

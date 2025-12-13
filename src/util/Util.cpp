@@ -1,17 +1,18 @@
 #include "Util.hpp"
+#include "Constants.hpp"
 
 bool Util::isWithinWindow(const sf::Sprite& sprite, const sf::Vector2u& windowSize, sf::Keyboard::Key direction)
 {
     switch (direction)
     {
     case sf::Keyboard::Key::Left:
-        if ((sprite.getPosition().x - Util::PLAYER_MOVEMENT_SPEED) < 0)
+        if ((sprite.getPosition().x - Constants::PLAYER_MOVEMENT_SPEED) < 0)
         {
             return false;
         }
         break;
     case sf::Keyboard::Key::Right:
-        if ((sprite.getPosition().x + sprite.getTexture().getSize().x + Util::PLAYER_MOVEMENT_SPEED)> windowSize.x)
+        if ((sprite.getPosition().x + sprite.getTexture().getSize().x + Constants::PLAYER_MOVEMENT_SPEED)> windowSize.x)
         {
             return false;
         }

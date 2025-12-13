@@ -6,6 +6,7 @@
 #include "../managers/TextureManager.hpp"
 #include "../model/Registry.hpp"
 #include "../util/Util.hpp"
+#include "../util/Constants.hpp"
 
 class GameService
 {
@@ -20,7 +21,7 @@ private:
 
 public:
     GameService();
-    ~GameService() = default;
+    ~GameService();
 
     entity_t createSprite(std::string texture, sf::Vector2f position = {0.f, 0.f});
     void createText(std::string initialText, std::string textKey, sf::Vector2f position);

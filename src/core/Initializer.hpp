@@ -1,9 +1,8 @@
 #pragma once
 
-#include <iostream>
 #include "GameService.hpp"
 #include "../model/Registry.hpp"
-#include "../util/Util.hpp"
+#include "../util/Constants.hpp"
 
 class Initializer
 {

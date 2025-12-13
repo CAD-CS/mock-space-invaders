@@ -2,7 +2,6 @@
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
 
-#include "../model/Registry.hpp"
 #include "Initializer.hpp"
 #include "SystemService.hpp"
 #include "GameService.hpp"

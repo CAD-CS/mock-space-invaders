@@ -1,5 +1,4 @@
 #include "GameService.hpp"
-#include <iostream>
 
 GameService::GameService()
 :
@@ -8,6 +7,9 @@ m_spriteManager(),
 m_textManager(),
 m_textureManager(),
 m_registry()
+{}
+
+GameService::~GameService()
 {}
 
 entity_t GameService::createSprite(std::string textureName, sf::Vector2f position)
@@ -86,7 +88,7 @@ void deleteFromLowestEnemiesMappping(std::unordered_map<int, entity_t>& mapping,
 void GameService::updateEntities()
 {
     std::unordered_map<int, entity_t> lowestEnemies;
-    for (int col = 0; col < Util::COLUMNS; ++col)
+    for (int col = 0; col < Constants::COLUMNS; ++col)
     {
         for (const auto& enemy : m_registry.enemies_tag)
         {
@@ -126,6 +128,4 @@ void GameService::destroyEntity(entity_t entity)
     deleteFromVector(m_registry.enemies_tag, entity);
 
     updateEntities();
-
-    //m_entityManager.decreaseEntityCount();
 }

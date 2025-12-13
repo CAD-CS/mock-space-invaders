@@ -28,7 +28,7 @@ void Initializer::initializePlayer(int windowWidth, int windowHeight)
 void Initializer::initializeEnemies()
 {
     const int rows = 4;
-    const int cols = Util::COLUMNS;
+    const int cols = Constants::COLUMNS;
     const float spacingX = 20.f;
     const float spacingY = 20.f;
     const float startX = 180.f;
@@ -51,7 +51,6 @@ void Initializer::initializeEnemies()
     }
 
     gameService.updateEntities();
-    std::cout << "Initialized " << m_registry.enemies_tag.size() << " enemies.\n";
 }
 
 void Initializer::initializeBlocks()

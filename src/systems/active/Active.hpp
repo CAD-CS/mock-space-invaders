@@ -21,8 +21,8 @@ namespace Active
     class Pause
     {
     public:
-        static void apply(sf::Vector2u windowSize,  bool& isPaused, const sf::Event::KeyPressed* key);  
-        static void apply(sf::Vector2u windowSize, bool& isPaused, const sf::Event::MouseButtonPressed* click);  
+        static void apply(const sf::Event::KeyPressed* key, sf::Vector2u windowSize,  bool& isPaused);
+        static void apply(const sf::Event::MouseButtonPressed* click, sf::Vector2u windowSize, bool& isPaused);  
     };
     
 }

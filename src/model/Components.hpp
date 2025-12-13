@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstddef>
+
 using entity_t = std::size_t;
 
 struct velocity_component
