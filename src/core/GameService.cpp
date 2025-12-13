@@ -15,17 +15,20 @@ GameService::~GameService()
 entity_t GameService::createSprite(std::string textureName, sf::Vector2f position)
 {
     assert(m_textureManager.getTextures().contains(textureName) && "Texture not found in texture map.");
+
     entity_t newEntity = m_entityManager.createEntity();
     m_registry.entityNames_map[newEntity] = textureName;
+    m_registry.rendable_tag.push_back(newEntity);
+
     sf::Sprite& newSprite = m_spriteManager.createSprite(newEntity, m_textureManager.getTexture(textureName));
     newSprite.setPosition(position);
-    m_registry.rendable_tag.push_back(newEntity);
+
     return newEntity;
 }
 
 void GameService::createText(std::string initialText, std::string textKey, sf::Vector2f position)
 {
-   sf::Text& newText = m_textManager.createText(initialText, textKey, position); 
+   m_textManager.createText(initialText, textKey, position); 
 }
 
 sf::Sprite& GameService::getSprite(entity_t entity)
@@ -42,12 +45,13 @@ std::unordered_map<entity_t, sf::Sprite>& GameService::getSprites()
 {
     return m_spriteManager.getSprites();
 }
+
 std::unordered_map<std::string, sf::Text>& GameService::getTexts()
 {
     return m_textManager.getTexts();
 }
 
-registry& GameService::getRegistry()
+Registry& GameService::getRegistry()
 {
     return m_registry;
 }
@@ -88,6 +92,7 @@ void deleteFromLowestEnemiesMappping(std::unordered_map<int, entity_t>& mapping,
 void GameService::updateEntities()
 {
     std::unordered_map<int, entity_t> lowestEnemies;
+
     for (int col = 0; col < Constants::COLUMNS; ++col)
     {
         for (const auto& enemy : m_registry.enemies_tag)

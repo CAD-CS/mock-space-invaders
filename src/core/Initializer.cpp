@@ -55,10 +55,10 @@ void Initializer::initializeEnemies()
 
 void Initializer::initializeBlocks()
 {
-    const int numBlocks = 9;
+    const int rows = 9;
     const float spacing = 100.f;
 
-    for (int i = 0; i < numBlocks; ++i)
+    for (int i = 0; i < rows; ++i)
     {
         entity_t block1 = gameService.createSprite("Block");
         sf::Sprite& sprite1 = gameService.getSprite(block1);

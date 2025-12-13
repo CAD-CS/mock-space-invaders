@@ -1,10 +1,11 @@
 #include "Passive.hpp"
+#include <iostream>
 #include "../../util/Util.hpp"
 #include "../../util/Constants.hpp"
 
 void Passive::Physics::apply(GameService& gameService)
 {
-    registry& registry = gameService.getRegistry();
+    Registry& registry = gameService.getRegistry();
     for(auto& [entity, sprite] : gameService.getSprites())
     {
         if(registry.velocities_map.contains(entity))
@@ -17,7 +18,7 @@ void Passive::Physics::apply(GameService& gameService)
 
 void Passive::Collision::apply(GameService& gameService)
 {
-    registry& registry = gameService.getRegistry();
+    Registry& registry = gameService.getRegistry();
     std::vector<entity_t> spritesToRemove;
 
     for (auto& hittable1 : registry.hittables_tag)
@@ -45,7 +46,7 @@ void Passive::Collision::apply(GameService& gameService)
 void Passive::OutOfBounds::apply(GameService& gameService,sf::Vector2u windowSize)
 {
     std::vector<entity_t> spritesToRemove;
-    registry& registry = gameService.getRegistry();
+    Registry& registry = gameService.getRegistry();
     for (auto& projectile : registry.projectiles_tag)
     {
         if (Util::isOutOfBounds(gameService.getSprite(projectile), windowSize))
@@ -67,7 +68,7 @@ void Passive::EnemyMovement::apply(GameService& gameService, sf::Clock& clock)
         return;
     }
 
-    registry& registry = gameService.getRegistry();
+    Registry& registry = gameService.getRegistry();
     for (auto& enemy : registry.enemies_tag)
     {
         sf::Sprite& enemySprite = gameService.getSprite(enemy);
@@ -77,7 +78,7 @@ void Passive::EnemyMovement::apply(GameService& gameService, sf::Clock& clock)
 
 void Passive::EnemyFiring::apply(GameService& gameService, sf::Vector2u windowSize, sf::Clock& clock)
 {
-    registry& registry = gameService.getRegistry();
+    Registry& registry = gameService.getRegistry();
     if (clock.getElapsedTime().asSeconds() < 6.f)
     {
         return;
@@ -113,7 +114,7 @@ void Passive::Scoring::apply(GameService& gameService, int& score)
     int pointsPerHit = 10;
     int hits = 0;
 
-    registry& registry = gameService.getRegistry();
+    Registry& registry = gameService.getRegistry();
     for (auto& projectile : registry.projectiles_tag)
     {
         for (auto& enemy : registry.enemies_tag)
@@ -131,17 +132,19 @@ void Passive::Scoring::apply(GameService& gameService, int& score)
 
 void Passive::GameOverCheck::apply(GameService& gameService, bool& isGameOver)
 {
-    registry& registry = gameService.getRegistry();
+    Registry& registry = gameService.getRegistry();
 
     if (!gameService.getSprites().contains(gameService.getPlayer()))
     {
         isGameOver = true;
+        std::cout << "You lost!" << std::endl;
         return;
     }
 
     if (registry.enemies_tag.empty())
     {
         isGameOver = true;
+        std::cout << "You won!" << std::endl;
         return;
     }
 
@@ -156,6 +159,7 @@ void Passive::GameOverCheck::apply(GameService& gameService, bool& isGameOver)
                 if (Util::isColliding(enemySprite, gameOverMarker))
                 {
                     isGameOver = true;
+                    std::cout << "You lost!" << std::endl;
                     return;
                 }
             }

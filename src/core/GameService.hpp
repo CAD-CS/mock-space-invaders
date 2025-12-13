@@ -16,7 +16,7 @@ private:
     SpriteManager m_spriteManager;
     TextManager m_textManager;
     TextureManager m_textureManager;
-    registry m_registry;
+    Registry m_registry;
 
 
 public:
@@ -36,7 +36,7 @@ public:
     
     void updateEntities();
 
-    registry& getRegistry();
+    Registry& getRegistry();
 
     entity_t getPlayer();
 };

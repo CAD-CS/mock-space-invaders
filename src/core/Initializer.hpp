@@ -8,7 +8,7 @@ class Initializer
 {
 private:
     GameService& gameService;
-    registry& m_registry;
+    Registry& m_registry;
 
     void initializePlayer(int windowWidth, int windowHeight);
     void initializeEnemies();

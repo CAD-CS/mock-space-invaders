@@ -4,11 +4,11 @@
 #include <SFML/Graphics.hpp>
 #include <unordered_map>
 
-struct registry
+struct Registry
 {
-    std::unordered_map<entity_t, velocity_component> velocities_map;
+    std::unordered_map<entity_t, VelocityComponent> velocities_map;
     std::unordered_map<entity_t, std::string> entityNames_map;
-    std::unordered_map<entity_t, enemyPosition_component> enemyPositions_map;
+    std::unordered_map<entity_t, EnemyPositionComponent> enemyPositions_map;
     std::unordered_map<int, entity_t> lowestEnemies_map;
     std::unordered_map<entity_t, sf::Text> texts_map;
 

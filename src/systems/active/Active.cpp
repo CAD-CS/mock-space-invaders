@@ -7,7 +7,8 @@ void Active::Movement::apply(GameService& gameService, const sf::Event::KeyPress
 {
     sf::Sprite& playerSprite = gameService.getSprite(gameService.getPlayer());
 
-    switch (key->code) {
+    switch (key->code) 
+    {
     case sf::Keyboard::Key::Left:
         if (!Util::isWithinWindow(playerSprite, windowSize, sf::Keyboard::Key::Left))
         {
@@ -29,17 +30,17 @@ void Active::Movement::apply(GameService& gameService, const sf::Event::KeyPress
 
 void Active::Firing::apply(GameService& gameService, const sf::Event::KeyPressed* key, sf::Vector2u windowSize) 
 {
-    registry& registry = gameService.getRegistry();
+    Registry& registry = gameService.getRegistry();
     switch (key->code) 
     {
     case sf::Keyboard::Key::Up:
         entity_t newProjectile = gameService.createSprite("PlayerProjectile");
 
         sf::Sprite& projectileSprite = gameService.getSprite(newProjectile);
+        sf::Sprite& playerSprite = gameService.getSprite(gameService.getPlayer());
+        float x = playerSprite.getGlobalBounds().size.x / 2.f + playerSprite.getGlobalBounds().position.x - projectileSprite.getGlobalBounds().size.x / 2.f;
 
-        float x = gameService.getSprite(gameService.getPlayer()).getGlobalBounds().size.x / 2.f + gameService.getSprite(gameService.getPlayer()).getGlobalBounds().position.x - projectileSprite.getGlobalBounds().size.x / 2.f;
-
-        float y =  gameService.getSprite(gameService.getPlayer()).getGlobalBounds().position.y - projectileSprite.getGlobalBounds().size.y - 1.f; 
+        float y =  playerSprite.getGlobalBounds().position.y - projectileSprite.getGlobalBounds().size.y - 1.f; 
 
         projectileSprite.setPosition({x, y});
 
@@ -59,6 +60,7 @@ void Active::Pause::apply(const sf::Event::KeyPressed* key, sf::Vector2u windowS
         isPaused = !isPaused;
     }
 }
+
 void Active::Pause::apply(const sf::Event::MouseButtonPressed* click, sf::Vector2u windowSize, bool& isPaused)
 {
     auto isClickInsideButton = [windowSize, click]() {

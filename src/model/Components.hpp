@@ -4,13 +4,13 @@
 
 using entity_t = std::size_t;
 
-struct velocity_component
+struct VelocityComponent
 {
     float xVel;
     float yVel;
 };
 
-struct enemyPosition_component
+struct EnemyPositionComponent
 {
     int row;
     int col;
